@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { fetchUsers } from "../../user-module/Business-Logic";
 const version = require("../../../package.json").version;
 
 export class ExpressRouteDriver {
@@ -23,7 +24,8 @@ export class ExpressRouteDriver {
   private static initUserRoutes(router: Router) {
     //get all users
     router.get("/users", async (req, res) => {
-      res.send("Get all users route.");
+      const payload = await fetchUsers();
+      res.send(payload);
     });
     //search all users, add query filters, text searching etc...
     router.get("/users/search", async (req, res) => {
