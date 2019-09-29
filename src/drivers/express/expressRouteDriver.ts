@@ -75,3 +75,16 @@ export class ExpressRouteDriver {
     });
   }
 }
+
+async function createUserAccount(req: Request, res: Response) {
+  try {
+    const user = req.body.user;
+    const accountType = req.body.accountType;
+    const accessRights = req.body.accessRights;
+    await userHandlerFunctions.createUserAccount({ user, accountType });
+    res.sendStatus(200).json();
+  } catch (err) {
+    res.sendStatus(404);
+  }
+}
+
