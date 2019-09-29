@@ -1,5 +1,5 @@
 import { buildingDocument } from "./building";
-import { userDocument } from "./user";
+import { UserDocument } from "./user";
 export interface accessLogDocument {
   _id: string;
   buildingId: string;
@@ -10,6 +10,6 @@ export interface accessLogDocument {
 
 export interface accessLog {
   building: Partial<buildingDocument>;
-  user: Partial<userDocument>;
+  user: Partial<UserDocument>;
   granted: boolean;
 }

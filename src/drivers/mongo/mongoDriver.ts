@@ -13,6 +13,7 @@ export class MongoDriver {
     const client = new mongodb.MongoClient(mongoUri, { useNewUrlParser: true });
     try {
       await client.connect();
+      console.log("connected");
       return client.db("safe").collection(collection);
     } catch (err) {
       console.log("Error on connect: " + err);
