@@ -1,1 +1,6 @@
-export { fetchUsers } from "./handlers/userHandler";
+export {
+  fetchUsers,
+  createUserAccount,
+  loadStudentRoommates,
+  login
+} from "./handlers/userHandler";
