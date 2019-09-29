@@ -88,3 +88,13 @@ async function createUserAccount(req: Request, res: Response) {
   }
 }
 
+async function login(req: Request, res: Response) {
+  try {
+    const loginRequest: loginRequest = { ...req.body };
+    const user = await userHandlerFunctions.login({ loginRequest });
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(404);
+  }
+}
+
