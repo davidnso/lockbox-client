@@ -1,5 +1,7 @@
-import { Router } from "express";
-import { fetchUsers } from "../../user-module/Business-Logic";
+import { Router, Request } from "express";
+import * as userHandlerFunctions from "../../user-module/Business-Logic";
+import { Response } from "express-serve-static-core";
+import { loginRequest, User } from "../../shared/entity";
 const version = require("../../../package.json").version;
 
 export class ExpressRouteDriver {
@@ -24,29 +26,34 @@ export class ExpressRouteDriver {
   private static initUserRoutes(router: Router) {
     //get all users
     router.get("/users", async (req, res) => {
-      const payload = await fetchUsers();
+      const payload = await userHandlerFunctions.fetchUsers();
       res.send(payload);
     });
     //search all users, add query filters, text searching etc...
     router.get("/users/search", async (req, res) => {
       res.send("search users route");
     });
+
+    router.get("/users/dashboard");
+
+    /**
+     * Fetching a users rommates based on the student's id.
+     */
+    router.get("/users/roommates", fetchRoommates);
     router.get("/users/:id", async (req, res) => {
       res.send("Get a specific user");
     });
     //add a user ( register )
-    router.post("/users", async (req, res) => {
-      res.send("add a user route");
-    });
-    router.get("/users/auth/login", async (req, res) => {
-      res.send("login route for users");
-    });
+    router.post("/users", createUserAccount);
+    router.get("/users/login", login);
     /**
      * update user account with new status or.. whatever
      */
     router.patch("/users/:id", async (req, res) => {
       res.send("update a single user account");
     });
+
+    router.get("/users/dashboard");
   }
   private static initAccessLogRoutes(router: Router) {
     /**
@@ -98,3 +105,14 @@ async function login(req: Request, res: Response) {
   }
 }
 
+async function fetchRoommates(req: Request, res: Response) {
+  try {
+    const studentId = req.body.studentId;
+    const roommates: User[] = await userHandlerFunctions.loadStudentRoommates({
+      id: studentId
+    });
+    res.status(200).send(roommates);
+  } catch (err) {
+    res.status(404);
+  }
+}
