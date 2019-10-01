@@ -45,6 +45,18 @@ export async function createUserAccount(params: {
   }
 }
 
+export async function findUser(params: { id: string }) {
+  const { id } = params;
+  try {
+    let user: studentUser[];
+    user = await dataStore.fetchUser(id);
+    console.log(user);
+    return user;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function login(params: { loginRequest: any }) {
   const { loginRequest } = params;
   try {
@@ -59,14 +71,23 @@ export async function login(params: { loginRequest: any }) {
   }
 }
 
+export async function findGuests({ id }: { id: string }) {
+  try {
+    const guests = await dataStore.fetchGuestsByHostId(id);
+    return guests;
+  } catch (err) {
+    console.log("Driver error: ", err);
+  }
+}
+
 async function fetchRoommatesByStudentId(params: { roommateIds: string[] }) {
   const { roommateIds } = params;
   try {
     let roommates: studentUser[];
+    console.log("Fetching roommates", roommateIds);
+
     if (roommateIds) {
-      roommateIds.map(async id => {
-        roommates = await dataStore.fetchUser(id);
-      });
+      return await dataStore.fetchRoommates(roommateIds);
     }
     return roommates!;
   } catch (err) {
@@ -77,17 +98,18 @@ async function fetchRoommatesByStudentId(params: { roommateIds: string[] }) {
 export async function loadStudentRoommates(params: { id: string }) {
   const { id } = params;
   let roommates: studentUser[];
-  let fullUser: any;
   //check if user exists and is found
-  const user: Partial<studentUser> = await dataStore.fetchUser(id);
+  const user: Partial<studentUser>[] = await dataStore.fetchUser(id);
+  console.log(user);
+
   if (user) {
     roommates = await fetchRoommatesByStudentId({
-      roommateIds: user.roommates!
+      roommateIds: user[0].roommates as string[]
     });
 
+    console.log("Actual roommate", roommates);
     return roommates;
     //TODO: add roommate to the FullStudentUser and return.
-    fullUser = { ...user, roommates };
   } else {
     throw new Error("User was not found!");
   }
