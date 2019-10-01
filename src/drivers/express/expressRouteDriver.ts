@@ -1,5 +1,7 @@
 import { Router, Request } from "express";
 import * as userHandlerFunctions from "../../user-module/Business-Logic";
+import * as serviceHandler from "../../service-module/Business-logic/serviceHandler";
+import * as buildingHandler from "../../building-module/business-logic/buildingHandler";
 import { Response } from "express-serve-static-core";
 import { loginRequest, User } from "../../shared/entity";
 const version = require("../../../package.json").version;
@@ -39,10 +41,8 @@ export class ExpressRouteDriver {
     /**
      * Fetching a users rommates based on the student's id.
      */
-    router.get("/users/roommates", fetchRoommates);
-    router.get("/users/:id", async (req, res) => {
-      res.send("Get a specific user");
-    });
+    router.get("/users/:id/roommates", fetchRoommates);
+    router.get("/users/:id", findUser);
     //add a user ( register )
     router.post("/users", createUserAccount);
     router.get("/users/login", login);
@@ -81,7 +81,16 @@ export class ExpressRouteDriver {
       res.send("post a new access log");
     });
   }
+  private static initServiceRequestRoutes(router: Router) {
+    router.get("/service");
+  }
 }
+
+/**
+ *
+ * User crud operations. refactor to module if time permits.
+ *
+ */
 
 async function createUserAccount(req: Request, res: Response) {
   try {
@@ -90,6 +99,16 @@ async function createUserAccount(req: Request, res: Response) {
     const accessRights = req.body.accessRights;
     await userHandlerFunctions.createUserAccount({ user, accountType });
     res.sendStatus(200).json();
+  } catch (err) {
+    res.sendStatus(404);
+  }
+}
+
+async function findUser(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const user = await userHandlerFunctions.findUser({ id });
+    res.status(200).send(user);
   } catch (err) {
     res.sendStatus(404);
   }
@@ -107,12 +126,99 @@ async function login(req: Request, res: Response) {
 
 async function fetchRoommates(req: Request, res: Response) {
   try {
-    const studentId = req.body.studentId;
+    const studentId = req.params.id;
+
     const roommates: User[] = await userHandlerFunctions.loadStudentRoommates({
       id: studentId
     });
     res.status(200).send(roommates);
   } catch (err) {
     res.status(404);
+  }
+}
+
+async function fetchGuests(req: Request, res: Response) {
+  try {
+    const hostId = req.params.id;
+    const guests = await userHandlerFunctions.findGuests({ id: hostId });
+  } catch (err) {
+    res.status(404);
+  }
+}
+
+async function deleteGuest(req: Request, res: Response) {
+  try {
+    const guestId = req.params.id;
+
+    // await userHandlerFunctions.deleteGuests({ id: guestId });
+    // res.status(200);
+  } catch (err) {
+    res.status(404);
+  }
+}
+
+/**
+ * service request crud operations...
+ *
+ */
+
+async function fetchServiceRequests(req: Request, res: Response) {
+  try {
+    const requester = req.params.id;
+
+    const serviceRequests = await serviceHandler.findUserServiceRequests({
+      requester
+    });
+    res.status(200).send(serviceRequests);
+  } catch (err) {
+    res.status(404);
+  }
+}
+
+async function updateServiceRequest(req: Request, res: Response) {
+  try {
+    const requestId: string = req.params.id;
+    const update: serviceHandler.TicketResponse = req.body.response;
+    await serviceHandler.updateServiceRequest({ requestId, response: update });
+  } catch (err) {
+    res.status(404);
+  }
+}
+
+/**
+ * Building crud operations
+ *
+ */
+
+async function fetchAllBuildings(req: Request, res: Response) {
+  try {
+    const buildings = await buildingHandler.fetchAllBuildings();
+    res.status(200).send(buildings);
+  } catch (err) {
+    res.status(400);
+  }
+}
+
+async function fetchBuilding(req: Request, res: Response) {
+  try {
+    const buildingId = req.params.id;
+    const building = await buildingHandler.fetchBuildingById({
+      luid: buildingId
+    });
+    res.status(200).send(building);
+  } catch (err) {
+    res.status(400);
+  }
+}
+
+async function fetchBuildingLogs(req: Request, res: Response) {
+  try {
+    const buildingId = req.params.id;
+    const accessLogs = await buildingHandler.fetchBuildingLogsById({
+      luid: buildingId
+    });
+    res.status(200).send(accessLogs);
+  } catch (err) {
+    res.status(400);
   }
 }
