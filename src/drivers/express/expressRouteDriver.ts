@@ -2,6 +2,7 @@ import { Router, Request } from "express";
 import * as userHandlerFunctions from "../../user-module/Business-Logic";
 import * as serviceHandler from "../../service-module/Business-logic/serviceHandler";
 import * as buildingHandler from "../../building-module/business-logic/buildingHandler";
+import * as logHandler from '../../logs-module/handlers/LogsHandler';
 import { Response } from "express-serve-static-core";
 import { loginRequest, User } from "../../shared/entity";
 const version = require("../../../package.json").version;
@@ -23,12 +24,15 @@ export class ExpressRouteDriver {
      */
     this.initUserRoutes(router);
     this.initAccessLogRoutes(router);
+    this.initServiceRequestRoutes(router);
+    this.initBuildingRoutes(router);
     return router;
   }
   private static initUserRoutes(router: Router) {
     //get all users
     router.get("/users", async (req, res) => {
-      const payload = await userHandlerFunctions.fetchUsers();
+      const role = req.query.role;
+      const payload = await userHandlerFunctions.fetchUsers({role});
       res.send(payload);
     });
     //search all users, add query filters, text searching etc...
@@ -53,15 +57,14 @@ export class ExpressRouteDriver {
       res.send("update a single user account");
     });
 
+    router.get("/users/:id/guests", fetchGuests);
     router.get("/users/dashboard");
   }
   private static initAccessLogRoutes(router: Router) {
     /**
      * fetch all access logs, sort by date...
      */
-    router.get("/logs", async (req, res) => {
-      res.send("Show all access logs");
-    });
+    router.get("/logs", fetchAllLogs);
     /**
      * fetch single access log
      */
@@ -76,13 +79,26 @@ export class ExpressRouteDriver {
     });
     /**
      * post a new access log, flip granted or not granted flag.
+     * 
+     * @use for the script that will populate access log to show real time updates. 
      */
     router.post("/logs", async (req, res) => {
       res.send("post a new access log");
     });
   }
+
   private static initServiceRequestRoutes(router: Router) {
-    router.get("/service");
+    router.get("/service/:id", fetchServiceRequests);
+
+    router.patch("/service/:id", updateServiceRequest);
+  }
+
+  private static initBuildingRoutes(router: Router) {
+    router.get("/buildings", fetchAllBuildings);
+
+    router.get("/buildings/:id", fetchBuilding);
+
+    router.get("/buildings/:id/logs", fetchBuildingLogs);
   }
 }
 
@@ -220,5 +236,14 @@ async function fetchBuildingLogs(req: Request, res: Response) {
     res.status(200).send(accessLogs);
   } catch (err) {
     res.status(400);
+  }
+}
+
+async function fetchAllLogs(req:Request, res: Response){
+  try{
+    const accessLogs = await logHandler.fetchAccessLogs();
+    res.status(200).send(accessLogs);
+  }catch(err){
+    res.status(404);
   }
 }
