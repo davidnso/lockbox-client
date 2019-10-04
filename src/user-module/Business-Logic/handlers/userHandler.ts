@@ -12,10 +12,10 @@ const STUDENT = "student";
 const ADMIN = "admin";
 const PRIVILEGED_USER = "privileged";
 
-export async function fetchUsers() {
+export async function fetchUsers({role}:{role?:string}) {
   try {
     //validate requester
-    return await dataStore.fetchAllUsers();
+    return await dataStore.fetchAllUsers(role);
   } catch (err) {
     console.log(err);
   }

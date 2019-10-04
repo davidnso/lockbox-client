@@ -100,9 +100,13 @@ export class UserMongoDataStore {
       console.log(err);
     }
   }
-  async fetchAllUsers() {
+  async fetchAllUsers(role?:string) {
     try {
-      return await this.userdb.find({}).toArray();
+      if(role){
+        return await this.userdb.find({role}).toArray();
+      }else{
+        return await this.userdb.find({}).toArray();
+      }
     } catch (err) {
       console.log(err);
     }
