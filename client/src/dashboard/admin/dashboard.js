@@ -1,13 +1,8 @@
-import React, { Component } from 'react'
-import Sidebar from './components/sidebar/sidebar'
+import React, { Component } from "react";
+import Sidebar from "../../navigation/navigation";
 
 export default class AdminDashboard extends Component {
-    render() {
-        return (
-            <div>
-                <Sidebar/>
-                <p>This is the dashboard</p>
-            </div>
-        )
-    }
+  render() {
+    return <div>This is the dashboard</div>;
+  }
 }
