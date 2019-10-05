@@ -1,14 +1,13 @@
 
-
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
 
 export default class Account extends Component {
     render() {
         return (
-            <View>
-                <Text> This is the account page </Text>
-            </View>
+            <div>
+                This is the accounts page
+            </div>
         )
     }
 }
+
