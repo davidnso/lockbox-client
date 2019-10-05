@@ -11,27 +11,30 @@ import Accounts from "../admin/accounts/accounts";
 import Tasks from "../admin/tasks/tasks";
 import Archive from "../admin/archives/archive";
 import Monitoring from "../admin/monitoring/monitoring";
+import "./navigation.css";
+import {logo} from '../resources/lock-logo.png'
 export default class Navigation extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <div className="container">
+          <img src={logo}></img><label>Lockbox</label>
           <nav>
             <ul>
               <li>
-                <Link to="/home">Dashboard</Link>
+                <Link style={{textDecoration:"none"}} to="/home">Dashboard</Link>
               </li>
               <li>
-                <Link to="/monitoring">Monitoring</Link>
+                <Link style={{textDecoration:"none"}} to="/monitoring">Monitoring</Link>
               </li>
               <li>
-                <Link to="/accounts">Accounts</Link>
+                <Link style={{textDecoration:"none"}} to="/accounts">Accounts</Link>
               </li>
               <li>
-                <Link to="/tasks">Task Master</Link>
+                <Link style={{textDecoration:"none"}} to="/tasks">Task Master</Link>
               </li>
               <li>
-                <Link to="/archive">Archive</Link>
+                <Link style={{textDecoration:"none"}} to="/archive">Archive</Link>
               </li>
             </ul>
           </nav>
