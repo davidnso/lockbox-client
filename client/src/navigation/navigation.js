@@ -18,7 +18,8 @@ export default class Navigation extends Component {
     return (
       <Router>
         <div className="container">
-          <img src={logo}></img><label>Lockbox</label>
+          <div className='logo' src={logo}></div>
+          <hr/>
           <nav>
             <ul>
               <li>
@@ -38,6 +39,7 @@ export default class Navigation extends Component {
               </li>
             </ul>
           </nav>
+          <img src={require('../resources/bottom-image.png')} style={{position:"absolute",left:0,bottom:0,width:'160px',height:'160x'}}></img>
         </div>
 
         <Switch>
