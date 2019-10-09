@@ -19,6 +19,7 @@ export default class AdminDashboard extends Component {
   render() {
     return (
       <div style={{ marginLeft: "230px", padding: "20px" }}>
+        <img style={{float: 'right', width:'25px', height:'30px' }} src={require('../../resources/accountIcon.png')}></img>
         <div>
           <h3 className="header">Dashboard</h3>
           <div className="banner">
@@ -62,6 +63,7 @@ export default class AdminDashboard extends Component {
               })}
             </div>
             <hr className="footer"></hr>
+            <img style={{height:'15px',width:'10px', float: 'right', marginRight: '10px'}} src={require('../../resources/chevron.png')}></img>
           </div>
           <div style={{
         marginLeft:'80px',
