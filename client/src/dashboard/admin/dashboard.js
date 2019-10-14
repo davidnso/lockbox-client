@@ -1,5 +1,36 @@
 import React, { Component } from "react";
+import Timeline from 'react-visjs-timeline'
+
 import "./dashboard.css";
+
+const CSS_String = 'margin-top:50px;'
+const options = {
+    width: '100%',
+    height: '450px',
+    stack: true,
+    showMajorLabels: true,
+    showCurrentTime: true,
+    zoomMin: 1000000,
+    type: 'box',
+    format: {
+      minorLabels: {
+        minute: 'h:mma',
+        hour: 'ha'
+      }
+    },
+    style: CSS_String
+  }
+  const items = [{
+    start: new Date(2010, 7, 15),
+    content: 'Trajectory A',
+  },
+  {
+    start: new Date(2010, 7, 15),
+    content: 'Trajectory A',
+  },{
+    start: new Date(2010, 7, 17),
+    content: 'Trajectory A',
+  }]
 export default class AdminDashboard extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +47,7 @@ export default class AdminDashboard extends Component {
       ]
     };
   }
+  scheduler
   render() {
     return (
       <div style={{ marginLeft: "230px", padding: "20px" }}>
@@ -84,8 +116,8 @@ export default class AdminDashboard extends Component {
             }}>
               Monitoring
             </p>
-            <h1></h1>
-          </div>
+            <Timeline className='timeline' options={options} items={items}/>
+            </div>
         </span>
 
         <span className="archiveCard">

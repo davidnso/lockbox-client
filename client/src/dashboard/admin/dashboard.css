@@ -140,3 +140,24 @@ border-radius: 10px;
     padding:5px;
     background-color: #fefefe;
 }
+
+.vis-item{
+  background-color: #C9A8E3;
+  border-radius: 10px !important;
+  border: none !important;
+
+  }
+
+  .vis-item,
+  .vis-item.vis-line {
+    border-width: 3px !important; 
+  }
+
+  .vis-time-axis {
+    border-width: 2px !important;
+    border-color: #F991A3 !important;
+  }
+
+  .vis-even .vis-odd{
+    border-width: 20px;
+  }
