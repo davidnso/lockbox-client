@@ -14,15 +14,31 @@ const options = {
     type: 'box',
     format: {
       minorLabels: {
-        minute: 'h:mma',
-        hour: 'ha'
+        millisecond:'SSS',
+        second:     's',
+        minute:     'HH:mm',
+        hour:       'HH:mm',
+        weekday:    'ddd D',
+        day:        'D',
+        month:      'MMM',
+        year:       'YYYY'
+      },
+      majorLabels: {
+        millisecond:'HH:mm:ss',
+        second:     'D MMMM HH:mm',
+        minute:     'ddd D MMMM',
+        hour:       'ddd D MMMM',
+        weekday:    'MMMM YYYY',
+        day:        'MMMM YYYY',
+        month:      'YYYY',
+        year:       ''
       }
     },
     style: CSS_String
   }
   const items = [{
     start: new Date(2010, 7, 15),
-    content: 'Trajectory A',
+    content: 'Entry: David Nsoesie',
   },
   {
     start: new Date(2010, 7, 15),
@@ -101,7 +117,7 @@ export default class AdminDashboard extends Component {
         marginLeft:'80px',
         marginTop:'90px',
         height: '500px',
-        padding:'5px',
+        padding:'20px',
         minHeight: '500px',
         borderRadius: '10px',
         backgroundColor: '#FBFBFB',
