@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Timeline from 'react-visjs-timeline'
-
+import axios from 'axios';
 import "./dashboard.css";
 
 const CSS_String = 'margin-top:50px;'
@@ -63,6 +63,27 @@ export default class AdminDashboard extends Component {
       ]
     };
   }
+
+  componentDidMount(){
+    this.fetchOnLoad().then(()=>{})
+  }
+
+  async fetchOnLoad(){
+    await Promise.all([
+      axios.get('http://localhost:4100/service').then(apiResponse=>{
+      this.setState({tickets: apiResponse.data.tickets.length ?apiResponse.data.tickets.length: 0 });
+      console.log(apiResponse.data.tickets.length);
+    }),
+    axios.get('http://localhost:4100/buildings').then(apiResponse=>{
+      // this.setState({buildingList: apiResponse.data.buildings})
+      this.setState({building: apiResponse.data.buildings[0].name});
+      this.setState({buildingList: apiResponse.data.buildings});
+
+      console.log(apiResponse.data.buildings[0].name)
+    })
+    ])
+    
+  }
   scheduler
   render() {
     return (
@@ -92,7 +113,7 @@ export default class AdminDashboard extends Component {
               </div>
             </div>
             <div className="subContainer">
-              {this.state.buildingList.map(buildings => {
+              {this.state.buildingList.map((buildings,index) => {
                 return (
                   <div>
                     <ul>
@@ -102,7 +123,7 @@ export default class AdminDashboard extends Component {
                             className="active"
                             style={{ backgroundColor: "#fff" , marginRight: '5px'}}
                           ></span>
-                          {buildings}
+                          {buildings.name}
                         </button>
                       </li>
                     </ul>
@@ -150,6 +171,7 @@ export default class AdminDashboard extends Component {
             >
               Account
             </p>
+            <a href='/'> 
             <div style={{ display: "flex", marginTop: "20px" }}>
               <img
                 style={{
@@ -175,6 +197,7 @@ export default class AdminDashboard extends Component {
                 </p>
               </div>
             </div>
+            </a>
           </div>
         </span>
       </div>

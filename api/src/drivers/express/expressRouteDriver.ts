@@ -89,7 +89,7 @@ export class ExpressRouteDriver {
 
   private static initServiceRequestRoutes(router: Router) {
     router.get("/service/:id", fetchServiceRequests);
-
+    router.get("/service", fetchAllTickets);
     router.patch("/service/:id", updateServiceRequest);
   }
 
@@ -201,6 +201,16 @@ async function updateServiceRequest(req: Request, res: Response) {
   }
 }
 
+async function fetchAllTickets(req:Request, res: Response){
+  try{
+    const tickets = await serviceHandler.fetchAllServiceRequests();
+    res.status(200).send({tickets});
+  }catch(err){
+    res.send(400);
+    console.log(err);
+  }
+}
+
 /**
  * Building crud operations
  *
@@ -209,7 +219,7 @@ async function updateServiceRequest(req: Request, res: Response) {
 async function fetchAllBuildings(req: Request, res: Response) {
   try {
     const buildings = await buildingHandler.fetchAllBuildings();
-    res.status(200).send(buildings);
+    res.status(200).send({buildings});
   } catch (err) {
     res.status(400);
   }

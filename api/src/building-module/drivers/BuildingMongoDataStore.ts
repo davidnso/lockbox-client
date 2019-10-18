@@ -12,7 +12,7 @@ export class BuildingMongoDataStore {
   }
 
   async findAllBuildings() {
-    this.buildingStore.find({});
+    return await this.buildingStore.find({}).toArray();
   }
 
   async findBuildingsByLUID({ luid }: { luid: string }) {

@@ -34,3 +34,9 @@ export async function updateServiceRequest({
    */
   // await dataStore
 }
+
+export async function fetchAllServiceRequests(){
+  const tickets = await dataStore.fetchAllTickets();
+  return tickets;
+}
+
