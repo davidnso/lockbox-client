@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./accounts.css";
+import axios from "axios";
 export default class Accounts extends Component {
   background = '../../resources/buildingIcon.png';
 
@@ -27,11 +28,25 @@ export default class Accounts extends Component {
           thumbnail: null,
           accessRights: ["Tubman Hall"]
         }
-      ]
+      ],
+      selectedUser: {}
     };
   }
   //TODO: ADD FILTER DROPDOWN AND ON CLICK HIDE THE SIDE BAR AND USER ACCOUNT INFO..
+  componentDidMount(){
+    this.fetchAllUsers().then((user)=>{
+      this.setState({selectedUser: user});
+    })
+  }
+  async fetchAllUsers(){
+    const apiResponse  = await axios.get('http://localhost:4100/users?role=Student');
+    this.setState({privUsers: apiResponse.data})
+    return apiResponse.data[0];
 
+  }
+  showUserDetails(user){
+    this.setState({selectedUser: user});
+  }
   render() {
     return (
       <div style={{ marginLeft: "230px", padding: "20px" }}>
@@ -81,7 +96,9 @@ export default class Accounts extends Component {
             >
               <ul className="listing">
               {this.state.privUsers.map(user=>
-              <li>
+              <li onClick={(e)=>{
+                this.showUserDetails(user,e)
+              }}>
               <img
                 style={{
                   width: "50px",
@@ -169,7 +186,7 @@ export default class Accounts extends Component {
                   color: "#B1B1B1"
                 }}
               >
-                Marcus Smart
+                {this.state.selectedUser.name}
               </h2>
               <hr style={{ marginBottom: "5px" }} />
               <p
@@ -185,7 +202,7 @@ export default class Accounts extends Component {
                 Access Rights
               </p>
               <img src={require('../../resources/fullBuildingIcon.png')} style={{ width: "80px", height: "70px", alignSelf: "center" }}></img>
-              <p style={{color: '#838383', fontFamily: 'Nunito', fontSize:'12px'}}>Tubman Hall</p>
+              <p style={{color: '#838383', fontFamily: 'Nunito', fontSize:'12px'}}>{this.state.selectedUser.accessRights}</p>
               <img src={require('../../resources/plusIcon.png')} style={{width: "21px", height: "21px", alignSelf: "center", cursor: 'pointer'}}></img>
             </div>
           </div>

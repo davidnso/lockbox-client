@@ -47,6 +47,7 @@ const options = {
     start: new Date(2010, 7, 17),
     content: 'Trajectory A',
   }]
+
 export default class AdminDashboard extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +61,8 @@ export default class AdminDashboard extends Component {
         "The Colonies",
         "Lucretia Kennard Hall",
         "Harriet Tubman Hall"
-      ]
+      ],
+      selected: 0
     };
   }
 
@@ -78,11 +80,31 @@ export default class AdminDashboard extends Component {
       // this.setState({buildingList: apiResponse.data.buildings})
       this.setState({building: apiResponse.data.buildings[0].name});
       this.setState({buildingList: apiResponse.data.buildings});
-
-      console.log(apiResponse.data.buildings[0].name)
+      console.log(apiResponse.data.buildings[0].name);
+    }),
+    axios.get(`http://localhost:4100/buildings/5d881a2b1c9d440000c7dd0d/logs`).then(apiResponse=>{
+      const logs = apiResponse.data.logs
+      logs.map(log=>{
+        items.push({start:new Date(2010, 7, 17), content: log.username, id: '7f2e7524-bf91-42cd-8e8b-e231223a4b51'})
+        console.log(items);
+      })
+  
     })
     ])
     
+  }
+
+  async fetchOnClick(buildingId){
+    axios.get(`http://localhost:4100/buildings/${buildingId}/logs`).then(apiResponse=>{
+      const logs = apiResponse.data.logs;
+      
+    })
+  }
+
+  changeSelectedIndex(index, building){
+    this.setState({selected: index});
+    this.setState({building: building.name})
+    console.log(index,building);
   }
   scheduler
   render() {
@@ -118,11 +140,13 @@ export default class AdminDashboard extends Component {
                   <div>
                     <ul>
                       <li>
-                        <button className="building-button">
-                          <span
+                        <button className="building-button" onClick={(e)=>{this.changeSelectedIndex(index,buildings,e)}}>
+                          {(this.state.selected===index)? <span
+                            className="active"
+                          ></span>: <span
                             className="active"
                             style={{ backgroundColor: "#fff" , marginRight: '5px'}}
-                          ></span>
+                          ></span>}
                           {buildings.name}
                         </button>
                       </li>
@@ -171,7 +195,6 @@ export default class AdminDashboard extends Component {
             >
               Account
             </p>
-            <a href='/'> 
             <div style={{ display: "flex", marginTop: "20px" }}>
               <img
                 style={{
@@ -197,7 +220,6 @@ export default class AdminDashboard extends Component {
                 </p>
               </div>
             </div>
-            </a>
           </div>
         </span>
       </div>
