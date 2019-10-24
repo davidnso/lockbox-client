@@ -100,11 +100,11 @@ export class UserMongoDataStore {
       console.log(err);
     }
   }
-  async fetchAllUsers(role?:string) {
+  async fetchAllUsers(role?: string) {
     try {
-      if(role){
-        return await this.userdb.find({role}).toArray();
-      }else{
+      if (role) {
+        return await this.userdb.find({ role }).toArray();
+      } else {
         return await this.userdb.find({}).toArray();
       }
     } catch (err) {
@@ -115,6 +115,17 @@ export class UserMongoDataStore {
     try {
       const user = await this.userdb.find(loginRequest);
       return user;
+    } catch (err) {
+      console.log("Mongo Error : ", err);
+    }
+  }
+
+  async updateUserStatus(params: { id: string; userUpdates: any }) {
+    try {
+      await this.userdb.updateOne(
+        { _id: new ObjectId(params.id) },
+        {$set:{ status: params.userUpdates.status }}
+      );
     } catch (err) {
       console.log("Mongo Error : ", err);
     }

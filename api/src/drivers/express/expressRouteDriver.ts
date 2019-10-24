@@ -53,9 +53,7 @@ export class ExpressRouteDriver {
     /**
      * update user account with new status or.. whatever
      */
-    router.patch("/users/:id", async (req, res) => {
-      res.send("update a single user account");
-    });
+    router.patch("/users/:id", updateUser);
 
     router.get("/users/:id/guests", fetchGuests);
     router.get("/users/dashboard");
@@ -69,7 +67,11 @@ export class ExpressRouteDriver {
      * fetch single access log
      */
     router.get("/logs/:id", async (req, res) => {
-      res.send("Fetch one access log");
+      try{
+
+      }catch(err){
+        res.status(400)
+      }
     });
     /**
      * fetch and download archived routes. add query params to allow downloading bundles.
@@ -173,6 +175,20 @@ async function deleteGuest(req: Request, res: Response) {
   }
 }
 
+async function updateUser(req: Request, res: Response){
+  try{
+    const updates = req.body;
+    console.log(req.body)
+    const id = req.params.id 
+    if(updates.status){
+    await userHandlerFunctions.updateUserStatus({id, userUpdates: updates});
+    }    
+    res.status(200);
+  }catch(err){
+     res.status(404).send('Error when updating document.')
+  }
+}
+
 /**
  * service request crud operations...
  *
@@ -243,7 +259,7 @@ async function fetchBuildingLogs(req: Request, res: Response) {
     const accessLogs = await buildingHandler.fetchBuildingLogsById({
       luid: buildingId
     });
-    res.status(200).send(accessLogs);
+    res.status(200).send({logs: accessLogs});
   } catch (err) {
     res.status(400);
   }

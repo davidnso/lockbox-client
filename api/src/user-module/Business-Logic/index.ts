@@ -4,5 +4,6 @@ export {
   loadStudentRoommates,
   findUser,
   findGuests,
+  updateUserStatus,
   login
 } from "./handlers/userHandler";

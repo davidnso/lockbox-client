@@ -80,7 +80,7 @@ export async function findGuests({ id }: { id: string }) {
   }
 }
 
-async function fetchRoommatesByStudentId(params: { roommateIds: string[] }) {
+ async function fetchRoommatesByStudentId(params: { roommateIds: string[] }) {
   const { roommateIds } = params;
   try {
     let roommates: studentUser[];
@@ -113,4 +113,10 @@ export async function loadStudentRoommates(params: { id: string }) {
   } else {
     throw new Error("User was not found!");
   }
+}
+
+export async function updateUserStatus({userUpdates, id}:{
+  userUpdates: any, id: string
+}){
+  await dataStore.updateUserStatus({id,userUpdates});
 }

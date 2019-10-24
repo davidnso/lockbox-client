@@ -1,5 +1,6 @@
 import { MongoDriver } from "../../drivers";
 import { throws } from "assert";
+import { ObjectId } from "mongodb";
 
 export class BuildingMongoDataStore {
   buildingStore: any;
@@ -28,36 +29,36 @@ export class BuildingMongoDataStore {
 
   async fetchLogsbyBuildingId({ luid }: { luid: string }) {
     try {
+      const objectId = new ObjectId(luid);
       const accessLogs = await this.buildingStore
         .aggregate([
           {
             $match: {
-              buildingId: luid
+              _id: objectId
             }
           },
           {
             $lookup: {
               from: "access-logs",
-              localField: "buildingId",
-              foreignField: "buid",
+              localField: "_id",
+              foreignField: "buildingId",
               as: "accessLogs"
             }
           },
           {
             $unwind: {
               path: "$accessLogs",
-              includeArrayIndex: false,
               preserveNullAndEmptyArrays: true
             }
           },
           {
             $replaceRoot: {
-              newRoot: "$accessLogss"
+              newRoot: "$accessLogs"
             }
           }
         ])
         .toArray();
-      return accessLogs[0];
+      return accessLogs;
     } catch (err) {
       console.log("Mongo Error: ", err);
     }
