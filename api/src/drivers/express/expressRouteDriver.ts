@@ -56,6 +56,7 @@ export class ExpressRouteDriver {
     router.patch("/users/:id", updateUser);
 
     router.get("/users/:id/guests", fetchGuests);
+    router.patch("/users/:id/guest", deleteGuest);
     router.get("/users/dashboard");
   }
   private static initAccessLogRoutes(router: Router) {
@@ -166,10 +167,10 @@ async function fetchGuests(req: Request, res: Response) {
 
 async function deleteGuest(req: Request, res: Response) {
   try {
-    const guestId = req.params.id;
-
-    // await userHandlerFunctions.deleteGuests({ id: guestId });
-    // res.status(200);
+    const name = req.body.name;
+    const id = req.params.id;
+    await userHandlerFunctions.deleteGuestByName({id,name});
+    res.status(200);
   } catch (err) {
     res.status(404);
   }

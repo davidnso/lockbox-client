@@ -5,5 +5,6 @@ export {
   findUser,
   findGuests,
   updateUserStatus,
-  login
+  login,
+  deleteGuestByName
 } from "./handlers/userHandler";

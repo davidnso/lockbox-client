@@ -63,10 +63,12 @@ export class privilegedUser extends User {
 export class studentUser extends User {
   roommates!: string[];
   status!: string;
+  guests!: any[]
   constructor(object: Partial<studentUser>) {
     object.role = "student";
     object.status = "no status";
     super(object);
     this.roommates = object.roommates as string[];
+    this.guests = object.guests as any[];
   }
 }

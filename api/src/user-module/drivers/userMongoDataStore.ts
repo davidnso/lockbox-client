@@ -120,6 +120,14 @@ export class UserMongoDataStore {
     }
   }
 
+  async deleteGuestByName({name,id}:{id:any,name:string}){
+    try{
+      await this.userdb.update({ id: new ObjectId(id)},{ $pull: {guests: {name:name}}})
+      console.log('delete successful');
+    }catch(err){
+      console.log(err);
+    }
+  }
   async updateUserStatus(params: { id: string; userUpdates: any }) {
     try {
       await this.userdb.updateOne(

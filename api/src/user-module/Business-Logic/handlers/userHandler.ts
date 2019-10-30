@@ -50,6 +50,10 @@ export async function findUser(params: { id: string }) {
   try {
     let user: studentUser[];
     user = await dataStore.fetchUser(id);
+    if(user[0].guests){
+      user[0].guests = user[0].guests.map(mapGuestsToProperContract);
+    }
+    
     console.log(user);
     return user;
   } catch (err) {
@@ -77,6 +81,14 @@ export async function findGuests({ id }: { id: string }) {
     return guests;
   } catch (err) {
     console.log("Driver error: ", err);
+  }
+}
+
+export async function deleteGuestByName({name, id}:{name:string,id: any}){
+  try{
+    await dataStore.deleteGuestByName({id,name});
+  }catch(err){
+    console.log('Driver error: ', err);
   }
 }
 
@@ -119,4 +131,22 @@ export async function updateUserStatus({userUpdates, id}:{
   userUpdates: any, id: string
 }){
   await dataStore.updateUserStatus({id,userUpdates});
+}
+
+function mapGuestsToProperContract(guest: any){
+     return {
+       name: guest.name,
+       end: guest.end,
+       percentage: calculatePercentage(guest.end),
+     }
+}
+
+function calculatePercentage(end: string){
+  if((Number.parseInt(end) - Date.now() < 0)){
+        console.log('less than 0 ')
+        return 0;
+      }else{
+       console.log('greater than 0')
+       return ((((Number.parseInt(end) - Date.now())/86400000) * 100)).toFixed(2);
+      }
 }

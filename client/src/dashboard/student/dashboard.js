@@ -13,20 +13,21 @@ export default class StudentDashboard extends Component {
       pendingStatus: '',
       roommates: [],
       guests: [],
+      highlightedGuest: [],
       showGuestModal: false,
       showStatusModal: false,
       showNotification: false,
       percentage: 30
     };
   }
-
-  componentDidMount() {
+  
+  componentWillMount() {
     this.fetchOnLoad().then(() => {});
   }
   ProgressBar = props => {
     return (
       <div className="progress-bar">
-        <this.Filler percentage={props.percentage} />
+        <this.Filler percentage={Number.parseInt(props.percentage)} />
       </div>
     );
   };
@@ -53,16 +54,22 @@ export default class StudentDashboard extends Component {
     this.setState({showNotification: true});
   }
 
+  deleteGuest(event,guest){
+    const userId = "5d90dc8f1c9d4400002fc3ce";
+    axios.patch(`http://localhost:4100/users/${userId}/guest`,{name: guest.name}).then(apiResponse=>{ 
+      console.log(apiResponse)
+    })
+  }
+
   async fetchOnLoad() {
     const userId = "5d90dc8f1c9d4400002fc3ce";
     axios.get(`http://localhost:4100/users/${userId}`).then(apiResponse => {
       const user = apiResponse.data[0];
       //parse name to only show the first.
+      console.log(user)
       this.setState({ user });
       this.setState({ guests: user.guests });
-      user.guests.map(guest=>{
-        /**do some math here... wooo! */
-      })
+
     });
     axios
       .get(`http://localhost:4100/users/${userId}/roommates`)
@@ -70,6 +77,19 @@ export default class StudentDashboard extends Component {
         const roommates = apiResponse.data;
         this.setState({ roommates });
       });
+  }
+
+  fetchRoommatePolicy(roommate){
+    const today = new Date();
+    const hours = today.getHours();
+
+    console.log(roommate.policies);
+    switch(true){
+      case (hours<12): return roommate.policies.morning;
+      case (hours>12 && hours<18): return roommate.policies.afternoon;
+      case (hours>18 && hours<24): return roommate.policies.evening;
+      default: return 'No policies in effect';
+    }
   }
 
   render() {
@@ -286,7 +306,7 @@ export default class StudentDashboard extends Component {
                           fontWeight: "300"
                         }}
                       >
-                        {roommate.policies.evening}
+                        {this.fetchRoommatePolicy(roommate)}
                       </label>
                     </div>
 
@@ -314,7 +334,7 @@ export default class StudentDashboard extends Component {
               width: "400px"
             }}
           >
-            {this.state.guests.map(guest => (
+            {this.state.guests? this.state.guests.map(guest => (
               <div
                 style={{
                   backgroundColor: "#EDF8FF",
@@ -384,8 +404,8 @@ export default class StudentDashboard extends Component {
                   </div>
                 </div>
 
-                <this.ProgressBar percentage={this.state.percentage} />
-                {this.state.percentage >= 100 && (
+                <this.ProgressBar percentage={guest.percentage} />
+                {guest.percentage == 33 && (
                   <div
                     style={{
                       float: "right",
@@ -398,12 +418,13 @@ export default class StudentDashboard extends Component {
                       src={require("../../resources/deleteIcon.png")}
                       onClick={() => {
                         this.setState({ showGuestModal: true });
+                        this.setState({highlightedGuest: guest});
                       }}
                     />
                   </div>
                 )}
               </div>
-            ))}
+            )): null}
 
             <h1></h1>
           </div>
@@ -474,6 +495,7 @@ export default class StudentDashboard extends Component {
                     color: 'white',
                     
                   }}
+                  onClick={(event)=>{this.deleteGuest(event,this.state.highlightedGuest)}}
                 >
                   Yes Delete!
                 </button>
