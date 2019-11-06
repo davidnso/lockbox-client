@@ -1,4 +1,5 @@
 import { MongoDriver } from "../../drivers";
+import { Ticket } from "../../shared/entity/ticket";
 
 export class ServiceMongoDataStore {
   ticketStore: any;
@@ -20,5 +21,9 @@ export class ServiceMongoDataStore {
     const tickets = await this.ticketStore.find().toArray();
     return tickets;
 
+  }
+
+  async documentTicket(info:Ticket){
+    await this.ticketStore.insert(info);
   }
 }

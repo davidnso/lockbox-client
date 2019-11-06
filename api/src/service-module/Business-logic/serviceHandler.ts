@@ -1,4 +1,6 @@
 import { ServiceMongoDataStore } from "../Drivers/ServiceMongoDataStore";
+import { ticketInfo } from "../../shared/entity";
+import { Ticket } from "../../shared/entity/ticket";
 
 export type TicketResponse = {
   status: string;
@@ -35,8 +37,18 @@ export async function updateServiceRequest({
   // await dataStore
 }
 
-export async function fetchAllServiceRequests(){
+export async function createNewTicket(info:ticketInfo){
+  if(info.buildingId){
+    try{
+      const userServiceTicket = new Ticket(info);
+      await dataStore.documentTicket(userServiceTicket);
+    }catch(err){
+      console.log(err);
+    }
+  }
+}
+
+export async function fetchAllServiceRequests() {
   const tickets = await dataStore.fetchAllTickets();
   return tickets;
 }
-

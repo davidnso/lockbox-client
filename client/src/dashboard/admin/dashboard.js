@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Timeline from 'react-visjs-timeline'
+import {Timeline, TimelineEvent} from 'react-event-timeline'
 import axios from 'axios';
 import "./dashboard.css";
 
@@ -36,7 +36,7 @@ const options = {
     },
     style: CSS_String
   }
-  const items = [{
+  let items = [{
     start: new Date(2010, 7, 15),
     content: 'Entry: David Nsoesie',
   },
@@ -62,6 +62,7 @@ export default class AdminDashboard extends Component {
         "Lucretia Kennard Hall",
         "Harriet Tubman Hall"
       ],
+      items: [],
       selected: 0
     };
   }
@@ -84,11 +85,10 @@ export default class AdminDashboard extends Component {
     }),
     axios.get(`http://localhost:4100/buildings/5d881a2b1c9d440000c7dd0d/logs`).then(apiResponse=>{
       const logs = apiResponse.data.logs
-      logs.map(log=>{
-        items.push({start:new Date(2010, 7, 17), content: log.username, id: '7f2e7524-bf91-42cd-8e8b-e231223a4b51'})
-        console.log(items);
-      })
-  
+      const items = logs.map(log=>{
+        return {start:new Date(2010, 7, 17), content: log.username}
+      });
+      this.setState({items});
     })
     ])
     
@@ -97,13 +97,22 @@ export default class AdminDashboard extends Component {
   async fetchOnClick(buildingId){
     axios.get(`http://localhost:4100/buildings/${buildingId}/logs`).then(apiResponse=>{
       const logs = apiResponse.data.logs;
-      
+      if(logs){
+        const items = logs.map(log=>{
+          return {start:new Date(2010, 7, 17), content: log.username}
+        });
+        this.setState({items});
+      }
+      else{
+        this.setState({items: []})
+      }
     })
   }
 
   changeSelectedIndex(index, building){
     this.setState({selected: index});
     this.setState({building: building.name})
+    this.fetchOnClick(building._id);
     console.log(index,building);
   }
   scheduler
@@ -177,7 +186,24 @@ export default class AdminDashboard extends Component {
             }}>
               Monitoring
             </p>
-            <Timeline className='timeline' options={options} items={items}/>
+            <Timeline>
+            {this.state.items.map(item => (
+            <TimelineEvent title="Granted"
+                           createdAt={`${item.start}`}
+                           icon={<i className="material-icons md-18">granted</i>}
+            >
+               {item.content}
+            </TimelineEvent>))}
+            <TimelineEvent
+                title="You sent an email to John Doe"
+                createdAt="2016-09-11 09:06 AM"
+                icon={<i className="material-icons md-18">granted</i>}
+            >
+                Like we talked, you said that you would share the shipment details? This is an urgent order and so I
+                    am losing patience. Can you expedite the process and pls do share the details asap. Consider this a
+                    gentle reminder if you are on track already!
+            </TimelineEvent>
+    </Timeline>
             </div>
         </span>
 

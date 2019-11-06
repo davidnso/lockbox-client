@@ -4,7 +4,7 @@ import * as serviceHandler from "../../service-module/Business-logic/serviceHand
 import * as buildingHandler from "../../building-module/business-logic/buildingHandler";
 import * as logHandler from '../../logs-module/handlers/LogsHandler';
 import { Response } from "express-serve-static-core";
-import { loginRequest, User } from "../../shared/entity";
+import { loginRequest, User,ticketInfo } from "../../shared/entity";
 const version = require("../../../package.json").version;
 
 export class ExpressRouteDriver {
@@ -92,6 +92,7 @@ export class ExpressRouteDriver {
 
   private static initServiceRequestRoutes(router: Router) {
     router.get("/service/:id", fetchServiceRequests);
+    router.post("/service/:id", createTicket);
     router.get("/service", fetchAllTickets);
     router.patch("/service/:id", updateServiceRequest);
   }
@@ -225,6 +226,23 @@ async function fetchAllTickets(req:Request, res: Response){
   }catch(err){
     res.send(400);
     console.log(err);
+  }
+}
+
+async function createTicket(req:Request, res: Response){
+  try{
+  //  const details = req.body.details;
+  //  const id = req.params.id;
+  //  const buildingId = req.body.building;
+  //  const begin = req.body.from;
+  //  const end = req.body.to;
+  const requesterId = req.params.id;
+  const info:ticketInfo = req.body.info;
+    console.log(info);
+   await serviceHandler.createNewTicket({requesterId, ...info});
+   res.send(200);
+  }catch(err){
+    res.send(404);
   }
 }
 
