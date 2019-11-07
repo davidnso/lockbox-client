@@ -34,7 +34,8 @@ export async function updateServiceRequest({
   /**
    * update the ticket with a response and set the status to accepted/denied.
    */
-  // await dataStore
+  // 
+  await dataStore.updateTicket({requestId,response})
 }
 
 export async function createNewTicket(info:ticketInfo){

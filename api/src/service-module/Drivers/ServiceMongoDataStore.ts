@@ -26,4 +26,8 @@ export class ServiceMongoDataStore {
   async documentTicket(info:Ticket){
     await this.ticketStore.insert(info);
   }
+
+  async updateTicket(update: any){
+    await this.ticketStore.updateOne({id: update.responseId}, {response: update.response})
+  }
 }
