@@ -29,7 +29,8 @@ export default class Accounts extends Component {
           accessRights: ["Tubman Hall"]
         }
       ],
-      selectedUser: {}
+      selectedUser: {},
+      updateUser: true,
     };
   }
   //TODO: ADD FILTER DROPDOWN AND ON CLICK HIDE THE SIDE BAR AND USER ACCOUNT INFO..
@@ -203,7 +204,11 @@ export default class Accounts extends Component {
               </p>
               <img src={require('../../resources/fullBuildingIcon.png')} style={{ width: "80px", height: "70px", alignSelf: "center" }}></img>
               <p style={{color: '#838383', fontFamily: 'Nunito', fontSize:'12px'}}>{this.state.selectedUser.accessRights}</p>
-              <img src={require('../../resources/plusIcon.png')} style={{width: "21px", height: "21px", alignSelf: "center", cursor: 'pointer'}}></img>
+              <img src={require('../../resources/plusIcon.png')} style={{width: "21px", height: "21px", alignSelf: "center", cursor: 'pointer'}} onClick={()=>(this.setState({updateUser: !this.state.updateUser}))}></img>
+              <br></br>
+              {this.state.updateUser && <><input type='text' placeholder="Enter building Name"></input>
+              <br/>
+              <img style={{width:'10px',height:'10px', cursor: 'pointer'}}src={require('../../resources/chevron.png')}></img></> }
             </div>
           </div>
         </div>
