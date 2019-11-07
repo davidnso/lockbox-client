@@ -211,6 +211,7 @@ async function fetchServiceRequests(req: Request, res: Response) {
 
 async function updateServiceRequest(req: Request, res: Response) {
   try {
+    console.log('updating')
     const requestId: string = req.params.id;
     const update: serviceHandler.TicketResponse = req.body.response;
     await serviceHandler.updateServiceRequest({ requestId, response: update });
@@ -264,7 +265,7 @@ async function fetchBuilding(req: Request, res: Response) {
   try {
     const buildingId = req.params.id;
     const building = await buildingHandler.fetchBuildingById({
-      luid: buildingId
+      id: buildingId
     });
     res.status(200).send(building);
   } catch (err) {
