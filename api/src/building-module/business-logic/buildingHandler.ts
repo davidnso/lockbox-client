@@ -12,10 +12,10 @@ export async function fetchAllBuildings() {
   }
 }
 
-export async function fetchBuildingById({ luid }: { luid: string }) {
+export async function fetchBuildingById({ id }: { id: string }) {
   try {
-    if (luid) {
-      const building = await dataStore.findBuildingsByLUID({ luid });
+    if (id) {
+      const building = await dataStore.findBuildingsByLUID({ id });
       return building;
     }
   } catch (err) {

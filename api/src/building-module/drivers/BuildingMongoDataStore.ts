@@ -16,12 +16,13 @@ export class BuildingMongoDataStore {
     return await this.buildingStore.find({}).toArray();
   }
 
-  async findBuildingsByLUID({ luid }: { luid: string }) {
+  async findBuildingsByLUID({ id }: { id: string }) {
     try {
+      console.log('here');
       const buildings = await this.buildingStore
-        .find({ buildingId: luid })
+        .find({ _id: new ObjectId(id) })
         .toArray();
-      return buildings;
+      return buildings? buildings: 'not found';
     } catch (err) {
       console.log("Mongo Error: ", err);
     }
