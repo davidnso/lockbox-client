@@ -113,7 +113,9 @@ export class UserMongoDataStore {
   }
   async matchUserCredentials(loginRequest: loginRequest) {
     try {
-      const user = await this.userdb.find(loginRequest);
+      console.log(loginRequest)
+      const user = await this.userdb.find(loginRequest).toArray();
+      console.log(user[0]);
       return user;
     } catch (err) {
       console.log("Mongo Error : ", err);

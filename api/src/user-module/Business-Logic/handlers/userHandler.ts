@@ -6,6 +6,7 @@ import {
   FullStudentUser,
   StudentUser
 } from "../../../shared/entity/user";
+import * as jwt from 'jsonwebtoken';
 const dataStore = new UserMongoDataStore();
 
 const STUDENT = "student";
@@ -66,8 +67,13 @@ export async function login(params: { loginRequest: any }) {
   try {
     if (loginRequest) {
       const user = await dataStore.matchUserCredentials(loginRequest);
+     
       if (user) {
-        return user;
+        const bearer= jwt.sign({user},'secretKey',{expiresIn: 86400});
+        return {user,bearer}
+      }
+      else{
+        return 'No user found'
       }
     }
   } catch (err) {

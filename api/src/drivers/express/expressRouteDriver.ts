@@ -49,7 +49,7 @@ export class ExpressRouteDriver {
     router.get("/users/:id", findUser);
     //add a user ( register )
     router.post("/users", createUserAccount);
-    router.get("/users/login", login);
+    router.post("/users/login", login);
     /**
      * update user account with new status or.. whatever
      */
@@ -136,7 +136,7 @@ async function findUser(req: Request, res: Response) {
 
 async function login(req: Request, res: Response) {
   try {
-    const loginRequest: loginRequest = { ...req.body };
+    const loginRequest: loginRequest = { ...req.body.auth };
     const user = await userHandlerFunctions.login({ loginRequest });
     res.status(200).send(user);
   } catch (err) {
