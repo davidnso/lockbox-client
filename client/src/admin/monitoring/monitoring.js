@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import BuildingChart from "../../dashboard/admin/components/chart/chart";
 
 export default class Monitoring extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ export default class Monitoring extends Component {
         <span style={{ float: "right", marginRight: "30px" }}>
           <form>
             <select
-              style={{ border: ".5px solid #838383", borderRadius: "40px" }}
+              style={{ border: ".5px solid #838383", borderRadius: "40px", float: 'left'}}
             >
               {this.state.buildings.map(building => (
                 <option value={building}>{building}</option>
@@ -32,7 +33,9 @@ export default class Monitoring extends Component {
             position: "absolute",
             top: "20"
           }}
-        ></div>
+        >
+          <BuildingChart height='700'/>
+        </div>
         <span style={{ display: "flex", flexDirection: "row", width: "90%", position: 'absolute', bottom: '70px', marginLeft: '20px' }}>
           <div className="archiveContainer">
             <p

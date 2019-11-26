@@ -94,8 +94,9 @@ async fetchOnLoad(){
         </TableRow>
       </TableHead>
       <TableBody>
-        {this.state.tableData? this.state.tableData.map(row => (
+        {this.state.tableData && this.state.tableData.length>1? this.state.tableData.map(row => (
           <TableRow key={row.id}>
+            {console.log('here in the archive table')}
             <TableCell component="th" scope="row">
               {row.id}
             </TableCell>
