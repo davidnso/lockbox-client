@@ -6,7 +6,8 @@ import {
   Switch,
   Route,
   Link,
-  Redirect
+  Redirect,
+  useRouteMatch
 } from "react-router-dom";
 import Login from "./login/login";
 require("typeface-nunito");
@@ -22,6 +23,7 @@ export class App extends Component {
     landing: true,
     login: false,
   };
+  
 
   loadLogin(){
     this.setState({landing: false})
@@ -119,7 +121,6 @@ export class App extends Component {
           <div class="right">Developer: David Nsoesie</div>
         </div>
       </div>}
-      {this.state.login && <Login/>}
       </>
     );
   }

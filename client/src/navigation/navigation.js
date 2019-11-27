@@ -4,7 +4,8 @@ import {
   Switch,
   Route,
   Link,
-  Redirect
+  Redirect,
+  useRouteMatch
 } from "react-router-dom";
 import AdminDashboard from "../dashboard/admin/dashboard";
 import StudentDashboard from "../dashboard/student/dashboard";
@@ -20,14 +21,27 @@ export default class Navigation extends Component {
     super(props);
     this.state = {
       student: true,
-      admin: false
+      admin: false,
+      params: {},
     };
   }
+
+  getRelativePath(){
+    let { path, url } = useRouteMatch();
+    const fullPathObject = { 
+      path,
+      url
+    }
+    this.setState({params: fullPathObject })
+  }
+componentWillMount(){
+  this.getRelativePath.bind();
+}
+
   render() {
     return (
       <>
-      <Router>
-        {this.props.context == "administrator" && (
+        {true && (
           <>
             <div className="container">
               <div className="logo" src={logo}></div>
@@ -35,27 +49,27 @@ export default class Navigation extends Component {
               <nav>
                 <ul>
                   <li>
-                    <Link style={{ textDecoration: "none" }} to="/home">
+                    <Link style={{ textDecoration: "none" }} to={`admin/home`}>
                       Dashboard
                     </Link>
                   </li>
                   <li>
-                    <Link style={{ textDecoration: "none" }} to="/monitoring">
+                    <a style={{ textDecoration: "none" }} href={`admin/monitoring`}>
                       Monitoring
-                    </Link>
+                    </a>
                   </li>
                   <li>
-                    <Link style={{ textDecoration: "none" }} to="/accounts">
+                    <Link style={{ textDecoration: "none" }} to={`admin/accounts`}>
                       Accounts
                     </Link>
                   </li>
                   <li>
-                    <Link style={{ textDecoration: "none" }} to="/tasks">
+                    <Link style={{ textDecoration: "none" }} to={`admin/tasks`}>
                       Task Master
                     </Link>
                   </li>
                   <li>
-                    <Link style={{ textDecoration: "none" }} to="/archive">
+                    <Link style={{ textDecoration: "none" }} to={`admin/archive`}>
                       Archive
                     </Link>
                   </li>
@@ -74,31 +88,23 @@ export default class Navigation extends Component {
             </div>
 
             <Switch>
-              <Route
-                exact
-                path="/admin"
-                render={() => <Redirect to="/home" />}
-              ></Route>
-              <Route path="/home">
+            <Route exact path="/admin" render={() => <Redirect to="/admin" />}></Route>
+              <Route exact path="/admin/home">
                 <AdminDashboard />
               </Route>
-              <Route path="/monitoring">
-                <Monitoring />
-              </Route>
-              <Route path="/accounts">
+              <Route path="/admin/monitoring" component={Monitoring}/>
+              <Route path="/admin/accounts">
                 <Accounts />
               </Route>
-              <Route path="/tasks">
+              <Route path="admin/tasks">
                 <Tasks />
               </Route>
-              <Route path="/archive">
+              <Route path="admin/archive">
                 <Archive />
               </Route>
             </Switch>
           </>
         )}
-      </Router>
-        <Router>
 {       this.props.context == 'student' && <><div className="container">
           <div className='logo' src={logo}></div>
           <hr/>
@@ -132,7 +138,6 @@ export default class Navigation extends Component {
 
         </Switch>
       </>}
-      </Router>
       </>
     );
   }
