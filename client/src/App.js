@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Navigation from "./navigation/navigation";
+import AdminNavigation from "./navigation/admin-navigation";
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,7 +13,7 @@ import Login from "./login/login";
 require("typeface-nunito");
 
 function renderNavigation() {
-  return <Navigation />;
+  return <AdminNavigation />;
 }
 
 export class App extends Component {
@@ -69,7 +69,8 @@ export class App extends Component {
             position: "absolute",
             width: "100%",
             marginTop: "90px",
-            zIndex: "0"
+            zIndex: "0",
+            animation: 'fadein 2s'
           }}
           src={require("./resources/splash.png")}
         ></img>
@@ -100,8 +101,8 @@ export class App extends Component {
             className="message-wrapper"
             style={{ textAlign: "center", fontFamily: "Nunito" }}
           >
-            <h1>Welcome to the Lockbox App!</h1>
-            <h2>
+            <h1 style={{fontSize: '45px'}}>Welcome to the Lockbox App!</h1>
+            <h2 style={{fontSize: '30px'}}>
               We believe in safety, security,
               <br /> and ease of use for all our users
             </h2>

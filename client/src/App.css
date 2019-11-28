@@ -40,6 +40,7 @@
   margin-top: 80px;
   flex-direction: row;
   justify-content: space-between;
+  animation: fadein 4s
 }
 
 .iconRow img{
@@ -95,13 +96,22 @@ font-size: 13px;
 
 }
 
+.message-wrapper{
+  animation: slide-up-fade-in-message ease 1s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    animation-fill-mode:forwards;
+}
+
 .message-wrapper button{
-  width: 140px;
-  height: 30px;
+  width: 150px;
+  height: 40px;
+  z-index: 5;
   background: #6DA3F1;
   border-radius: 20px;
   border: none;
   margin-top: 7px;
+  font-size: 14px;
   color: white;
   font-weight: bold;
 }
@@ -109,7 +119,8 @@ font-size: 13px;
 .splash{
   background-image: url('./resources/splash.png');
   width: 1000px;
-  heigth: 100%;
+  height: 100%;
+  animation: fadein 2s;
 }
 .context .button{
   border-radius: 100px;
@@ -178,4 +189,23 @@ color: #9C9C9C;
   content: "";
   display: table;
   clear: both;
+}
+
+/*
+animations
+*/
+@keyframes slide-up-fade-in-message{
+  0% {
+      opacity:0;
+      transform:  translate(0px,40px)  ;
+  }
+  100% {
+      opacity:1;
+      transform:  translate(0px,0px)  ;
+  }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

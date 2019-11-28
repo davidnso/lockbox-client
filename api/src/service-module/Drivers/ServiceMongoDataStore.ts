@@ -12,7 +12,7 @@ export class ServiceMongoDataStore {
   }
 
   async fetchUserServiceRequests({ id }: { id: string }) {
-    const tickets = await this.ticketStore.find({ userId: id }).toArray();
+    const tickets = await this.ticketStore.find({ requesterId: id }).toArray();
     return tickets;
   }
 

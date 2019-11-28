@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
 import Modal from "react-bootstrap/Modal";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import "./dashboard.css";
@@ -112,9 +113,12 @@ export default class StudentDashboard extends Component {
             verticalAlign: "middle"
           }}
         >
-          <p style={{ fontWeight: 500, fontSize: "17px", color: "#5A5555" }}>
-            Logout
-          </p>
+          <Link to='/'>
+            <p style={{ fontWeight: 500, fontSize: "17px", color: "#5A5555" }}>
+              Logout
+            </p>
+          </Link>
+          
           <div
             style={{
               width: "100%",

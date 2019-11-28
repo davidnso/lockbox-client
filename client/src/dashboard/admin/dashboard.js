@@ -1,53 +1,57 @@
 import React, { Component } from "react";
-import {Timeline, TimelineEvent} from 'react-event-timeline'
-import axios from 'axios';
+import {Link} from 'react-router-dom'
+import { Timeline, TimelineEvent } from "react-event-timeline";
+import axios from "axios";
 import "./dashboard.css";
 import BuildingChart from "./components/chart/chart";
 
-const CSS_String = 'margin-top:50px;'
+const CSS_String = "margin-top:50px;";
 const options = {
-    width: '100%',
-    height: '450px',
-    stack: true,
-    showMajorLabels: true,
-    showCurrentTime: true,
-    zoomMin: 1000000,
-    type: 'box',
-    format: {
-      minorLabels: {
-        millisecond:'SSS',
-        second:     's',
-        minute:     'HH:mm',
-        hour:       'HH:mm',
-        weekday:    'ddd D',
-        day:        'D',
-        month:      'MMM',
-        year:       'YYYY'
-      },
-      majorLabels: {
-        millisecond:'HH:mm:ss',
-        second:     'D MMMM HH:mm',
-        minute:     'ddd D MMMM',
-        hour:       'ddd D MMMM',
-        weekday:    'MMMM YYYY',
-        day:        'MMMM YYYY',
-        month:      'YYYY',
-        year:       ''
-      }
+  width: "100%",
+  height: "450px",
+  stack: true,
+  showMajorLabels: true,
+  showCurrentTime: true,
+  zoomMin: 1000000,
+  type: "box",
+  format: {
+    minorLabels: {
+      millisecond: "SSS",
+      second: "s",
+      minute: "HH:mm",
+      hour: "HH:mm",
+      weekday: "ddd D",
+      day: "D",
+      month: "MMM",
+      year: "YYYY"
     },
-    style: CSS_String
-  }
-  let items = [{
+    majorLabels: {
+      millisecond: "HH:mm:ss",
+      second: "D MMMM HH:mm",
+      minute: "ddd D MMMM",
+      hour: "ddd D MMMM",
+      weekday: "MMMM YYYY",
+      day: "MMMM YYYY",
+      month: "YYYY",
+      year: ""
+    }
+  },
+  style: CSS_String
+};
+let items = [
+  {
     start: new Date(2010, 7, 15),
-    content: 'Entry: David Nsoesie',
+    content: "Entry: David Nsoesie"
   },
   {
     start: new Date(2010, 7, 15),
-    content: 'Trajectory A',
-  },{
+    content: "Trajectory A"
+  },
+  {
     start: new Date(2010, 7, 17),
-    content: 'Trajectory A',
-  }]
+    content: "Trajectory A"
+  }
+];
 
 export default class AdminDashboard extends Component {
   constructor(props) {
@@ -68,64 +72,84 @@ export default class AdminDashboard extends Component {
     };
   }
 
-  componentDidMount(){
-    const user = localStorage.getItem('jwt')
-    if(user){
-      this.props.history.push('/');
+  componentDidMount() {
+    const user = localStorage.getItem("jwt");
+    if (user) {
     }
-    
-    this.fetchOnLoad().then(()=>{})
+    this.fetchOnLoad().then(() => {});
   }
 
-  async fetchOnLoad(){
+  async fetchOnLoad() {
     await Promise.all([
-      axios.get('http://localhost:4100/service').then(apiResponse=>{
-      this.setState({tickets: apiResponse.data.tickets.length ?apiResponse.data.tickets.length: 0 });
-      console.log(apiResponse.data.tickets.length);
-    }),
-    axios.get('http://localhost:4100/buildings').then(apiResponse=>{
-      // this.setState({buildingList: apiResponse.data.buildings})
-      this.setState({building: apiResponse.data.buildings[0].name});
-      this.setState({buildingList: apiResponse.data.buildings});
-      console.log(apiResponse.data.buildings[0].name);
-    }),
-    axios.get(`http://localhost:4100/buildings/5d881a2b1c9d440000c7dd0d/logs`).then(apiResponse=>{
-      const logs = apiResponse.data.logs
-      const items = logs.map(log=>{
-        return {start:new Date(2010, 7, 17), content: log.username}
-      });
-      this.setState({items});
-    })
-    ])
-    
-  }
-
-  async fetchOnClick(buildingId){
-    axios.get(`http://localhost:4100/buildings/${buildingId}/logs`).then(apiResponse=>{
-      const logs = apiResponse.data.logs;
-      if(logs){
-        const items = logs.map(log=>{
-          return {start:new Date(2010, 7, 17), content: log.username}
+      axios.get("http://localhost:4100/service").then(apiResponse => {
+        this.setState({
+          tickets: apiResponse.data.tickets.length
+            ? apiResponse.data.tickets.length
+            : 0
         });
-        this.setState({items});
-      }
-      else{
-        this.setState({items: []})
-      }
-    })
+        console.log(apiResponse.data.tickets.length);
+      }),
+      axios.get("http://localhost:4100/buildings").then(apiResponse => {
+        // this.setState({buildingList: apiResponse.data.buildings})
+        this.setState({ building: apiResponse.data.buildings[0].name });
+        this.setState({ buildingList: apiResponse.data.buildings });
+        console.log(apiResponse.data.buildings[0].name);
+      }),
+      axios
+        .get(`http://localhost:4100/buildings/5d881a2b1c9d440000c7dd0d/logs`)
+        .then(apiResponse => {
+          const logs = apiResponse.data.logs;
+          const items = logs.map(log => {
+            return { start: new Date(2010, 7, 17), content: log.username };
+          });
+          this.setState({ items });
+        })
+    ]);
   }
 
-  changeSelectedIndex(index, building){
-    this.setState({selected: index});
-    this.setState({building: building.name})
-    this.fetchOnClick(building._id);
-    console.log(index,building);
+  async fetchOnClick(buildingId) {
+    axios
+      .get(`http://localhost:4100/buildings/${buildingId}/logs`)
+      .then(apiResponse => {
+        const logs = apiResponse.data.logs;
+        if (logs) {
+          const items = logs.map(log => {
+            return { start: new Date(2010, 7, 17), content: log.username };
+          });
+          this.setState({ items });
+        } else {
+          this.setState({ items: [] });
+        }
+      });
   }
-  scheduler
+
+  changeSelectedIndex(index, building) {
+    this.setState({ selected: index });
+    this.setState({ building: building.name });
+    this.fetchOnClick(building._id);
+    console.log(index, building);
+  }
+  scheduler;
   render() {
+    const { history } = this.props;
     return (
       <div style={{ marginLeft: "230px", padding: "20px" }}>
-        <img style={{float: 'right', width:'25px', height:'30px' }} src={require('../../resources/accountIcon.png')}></img>
+        <Link to='/'>
+        <p
+          style={{
+            float: "right",
+            padding: "10px",
+            fontWeight: "bold",
+            width: "25px",
+            height: "30px",
+            fontFamily: "Nunito",
+            color: "grey",
+            cursor: "pointer"
+          }}
+        >
+          Logout
+        </p>
+        </Link>
         <div>
           <h3 className="header">Dashboard</h3>
           <div className="banner">
@@ -150,18 +174,28 @@ export default class AdminDashboard extends Component {
               </div>
             </div>
             <div className="subContainer">
-              {this.state.buildingList.map((buildings,index) => {
+              {this.state.buildingList.map((buildings, index) => {
                 return (
                   <div>
                     <ul>
                       <li>
-                        <button className="building-button" onClick={(e)=>{this.changeSelectedIndex(index,buildings,e)}}>
-                          {(this.state.selected===index)? <span
-                            className="active"
-                          ></span>: <span
-                            className="active"
-                            style={{ backgroundColor: "#fff" , marginRight: '5px'}}
-                          ></span>}
+                        <button
+                          className="building-button"
+                          onClick={e => {
+                            this.changeSelectedIndex(index, buildings, e);
+                          }}
+                        >
+                          {this.state.selected === index ? (
+                            <span className="active"></span>
+                          ) : (
+                            <span
+                              className="active"
+                              style={{
+                                backgroundColor: "#fff",
+                                marginRight: "5px"
+                              }}
+                            ></span>
+                          )}
                           {buildings.name}
                         </button>
                       </li>
@@ -171,29 +205,42 @@ export default class AdminDashboard extends Component {
               })}
             </div>
             <hr className="footer"></hr>
-            <img style={{height:'15px',width:'10px', float: 'right', marginRight: '10px'}} src={require('../../resources/chevron.png')}></img>
+            <img
+              style={{
+                height: "15px",
+                width: "10px",
+                float: "right",
+                marginRight: "10px"
+              }}
+              src={require("../../resources/chevron.png")}
+            ></img>
           </div>
-          <div style={{
-        marginLeft:'80px',
-        marginTop:'90px',
-        height: '500px',
-        padding:'20px',
-        minHeight: '500px',
-        borderRadius: '10px',
-        backgroundColor: '#FBFBFB',
-        width: '800px'}}>
-            <p style={{
-              marginTop: '1px',
-              fontFamily: 'sans-serif',
-              marginLeft: '15px',
-              fontSize: '12px',
-              letterSpacing: '.15em',
-              color: '#5A5555'
-            }}>
+          <div
+            style={{
+              marginLeft: "80px",
+              marginTop: "90px",
+              height: "500px",
+              padding: "20px",
+              minHeight: "500px",
+              borderRadius: "10px",
+              backgroundColor: "#FBFBFB",
+              width: "800px"
+            }}
+          >
+            <p
+              style={{
+                marginTop: "1px",
+                fontFamily: "sans-serif",
+                marginLeft: "15px",
+                fontSize: "12px",
+                letterSpacing: ".15em",
+                color: "#5A5555"
+              }}
+            >
               Monitoring
             </p>
-            <BuildingChart height='450'/>
-            </div>
+            <BuildingChart height="450" />
+          </div>
         </span>
 
         <span className="archiveCard">

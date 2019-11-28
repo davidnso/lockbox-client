@@ -12,18 +12,21 @@ import {
 import * as serviceWorker from "./serviceWorker";
 import Login from "./login/login";
 import AdminDashboard from "./dashboard/admin/dashboard";
-import Navigation from "./navigation/navigation";
-import StudentDashboard from "./dashboard/student/dashboard";
+import AdminNavigation from "./navigation/admin-navigation";
 import Tasks from "./admin/tasks/tasks";
 import Archive from "./admin/archives/archive";
 import Accounts from "./admin/accounts/accounts";
+import StudentNavigation from "./navigation/student-navigation";
 
 ReactDOM.render(
   <Router>
     <Route exact path="/" component={App}></Route>
     <Route exact path="/login" component={Login}></Route>
     <Route path="/admin">
-      <Navigation />
+      <AdminNavigation />
+    </Route>
+    <Route path='/student'>
+      <StudentNavigation/>
     </Route>
     
   </Router>,

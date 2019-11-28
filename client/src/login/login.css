@@ -12,6 +12,7 @@
     box-sizing: border-box;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
     padding: 70px 30px;
+    animation: slide-up-fade-in 2s;
 }
 
 .avatar{
@@ -82,3 +83,18 @@
 {
     color: #8FD7C6;
 }
+
+/*
+animations
+*/
+@keyframes slide-up-fade-in{
+    0% {
+        opacity:0;
+        transform:  translate(-50%,-45%)  ;
+    }
+    100% {
+        opacity:1;
+        transform:  translate(-50%,-50%)  ;
+    }
+  }
+  

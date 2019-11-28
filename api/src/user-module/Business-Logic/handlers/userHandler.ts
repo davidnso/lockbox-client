@@ -68,8 +68,9 @@ export async function login(params: { loginRequest: any }) {
     if (loginRequest) {
       const user = await dataStore.matchUserCredentials(loginRequest);
      
-      if (user) {
-        const bearer= jwt.sign({user},'secretKey',{expiresIn: 86400});
+      if (user || user.length) {
+
+        const bearer= user.length>0? jwt.sign({user},'secretKey',{expiresIn: 86400}): null;
         return {user,bearer}
       }
       else{

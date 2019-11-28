@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Axios from "axios";
-
+import './tasks.css'
 export default class Tasks extends Component {
   state = {
     tickets: [],
@@ -49,16 +49,24 @@ export default class Tasks extends Component {
   }
   render() {
     return (
-      <div style={{ marginLeft: "230px" }}>
+      <div style={{ marginLeft: "260px" }}>
         This is the tasks page
         {this.state.tickets
-          ? this.state.tickets.map(ticket => <div>
-            <p>{ticket.details}</p>
+          ? this.state.tickets.map(ticket => <div className='taskCard'>
+            <p>Details: {ticket.details}</p>
             {/* <p>{ticket.requester.name}</p> */}
             <label>Reason</label>
             <input type="textarea" onChange={(event)=>this.handleResponseChange(event,this.state.response)}></input>
-            <button value="accept" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Accept</button>
-            <button value="decline" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Decline</button>
+            <div style={{marginTop: "20px",
+                  display: "flex",
+                  flexDirection: 'row',
+                  width: '70%',
+                  marginTop: '120px',
+                  margin:'auto',}}>
+            <button className="accept" value="accept" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Accept</button>
+            <button className="decline" value="decline" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Decline</button>
+              </div>
+            
           </div>)
           : null}
       </div>

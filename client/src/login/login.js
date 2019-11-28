@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import {Link,Redirect} from 'react-router-dom';
 import './login.css'
 import Axios from 'axios';
 export default class Login extends Component {
@@ -7,29 +7,53 @@ export default class Login extends Component {
         username: '',
         password: '',
         loginFailed: false,
+        toStudentDashboard: false,
+        toAdminDashboard: false,
     }
     changeUsername(event){
-        console.log(event.target)
         this.setState({[event.target.name]: event.target.value});
     }
     login(){
-        Axios.post('http://localhost:4100/users/login').then(apiResponse=>{
+        const auth = {
+            username: this.state.username,
+            password: this.state.password,
+        }
+        Axios.post('http://localhost:4100/users/login', {auth}).then(apiResponse=>{
             if(!apiResponse.data.bearer || !apiResponse.data.user){
                 this.setState({loginFailed: true})
             }
             else{
+                console.log(apiResponse.data.user)
                 localStorage.setItem('jwt', apiResponse.data.bearer);
+                localStorage.setItem('user',apiResponse.data.user[0]._id);
                 this.renderDashboard(apiResponse.data.user)
             }
             
         })
     }
     renderDashboard(user){
-        this.setState({loginFailed: false})
+        this.setState({loginFailed: false});
+        if(user[0]){
+           if(user[0].role){
+               if(user[0].role=='Admin'){
+                this.setState({toAdminDashboard: true});
+               }
+               if(user[0].role == 'Student'){
+                this.setState({toStudentDashboard: true});
+            } 
+           }
+           
+        }
     }
     render() {
 
-   
+        if(this.state.toAdminDashboard){
+            console.log(this.state.toAdminDashboard)
+            return <Redirect to='/admin'/>
+        }
+        if(this.state.toStudentDashboard){
+            return <Redirect to='/student'/>
+        }
 
         return (
             <>
@@ -52,8 +76,8 @@ export default class Login extends Component {
                     <p>Password</p>
                     <input type="password" name="password" placeholder="Enter Password" onChange={event=>{this.changeUsername(event);}}/>
                    
-                    <Link style={{textDecoration: 'none'}} to='/admin/home'>
-                    <input type="submit" name="" value="Login" href='/admin/home'/>
+                    <Link style={{textDecoration: 'none'}}>
+                    <input type="submit" name="" value="Login" href='/admin/home' onClick={(event)=>{this.login(event)}}/>
                     </Link>
                     <a style={{color: 'red', visibility: this.state.loginFailed? 'visible':'hidden'}}>Login unsuccessful</a><br/>
                     <a href="#">Lost your password?</a><br/>
