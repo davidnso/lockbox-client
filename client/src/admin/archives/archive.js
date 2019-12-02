@@ -110,7 +110,6 @@ export default class Archive extends Component {
               <hr className="title-line" />
               <p className="building-name sub-text">Tracking</p>
             </div>
-            <h1>{this.state.tableData.length}</h1>
           </div>
         </div>
         <ReactTable columns={columns} data={this.state.tableData}></ReactTable>

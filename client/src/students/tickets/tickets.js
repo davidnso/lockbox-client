@@ -18,7 +18,7 @@ export default class Tickets extends Component {
   handleSubmit(event) {
     const userId = localStorage.getItem('user');
     const info = {
-      building: this.state.building,
+      buildingId: '5d881a161c9d440000c7dd0b',
       begin: this.state.begin,
       end: this.state.end,
       requesterId: localStorage.getItem('user'),
@@ -105,12 +105,7 @@ export default class Tickets extends Component {
       //     </div>
 
       //     <h3 className="header">Tickets</h3>
-      //     <div style={{width: '90%', backgroundColor: '#FBFBFB', marginLeft: '15px', borderRadius: '8px', padding: '20px'}}>
-      //       <p className="ticketDetails">SR#: 432423423</p>
-      //       <p className="ticketDetails">Details: sjjfodajfkoadjfodjjdoj</p>
-      //       <p className="ticketDetails">Duration: sd hours</p>
-      //       <img style={{height: '15px', width: '10px', float:'right'}} src={require('../../resources/chevron.png')}/>
-      //     </div>
+      //     
       //   </div>
       // </div>
       <div style={{ marginLeft: "230px", padding: "20px" }}>
@@ -141,11 +136,18 @@ export default class Tickets extends Component {
             No Pending Tickets at this time, click "create new" To start a new
             one
           </h3>
-        ) : (
+        ) : 
           this.state.currentTickets.map(ticket => (
-            <div>Existing tickets will be here.</div>
+            <>
+            <div style={{width: '90%', backgroundColor: '#FBFBFB', marginLeft: '15px', borderRadius: '8px', padding: '20px'}}>
+          <p className="ticketDetails">SR#: {ticket.buildingId}</p>
+            <p className="ticketDetails">Details: {ticket.details}</p>
+            <p className="ticketDetails">Duration: {ticket.end}</p>
+            <img style={{height: '15px', width: '10px', float:'right'}} src={require('../../resources/chevron.png')}/>
+          </div>
+          </>
           ))
-        )}
+        }
         {this.state.createTicket && this.createFormModal()}
       </div>
     );

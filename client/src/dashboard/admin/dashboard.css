@@ -143,7 +143,7 @@ border-radius: 10px;
 }
 
 .vis-item{
-  background-color: #C9A8E3;
+  background-color: rgb(145, 181, 249);
   border-radius: 10px !important;
   border: none !important;
   opacity: 60% !important;
@@ -156,7 +156,7 @@ border-radius: 10px;
 
   .vis-time-axis {
     border-width: 2px !important;
-    border-color: #F991A3 !important;
+    border-color: rgb(145, 181, 249) !important;
   }
 
   .vis-even .vis-odd{

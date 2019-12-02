@@ -113,8 +113,8 @@ export default class StudentDashboard extends Component {
             verticalAlign: "middle"
           }}
         >
-          <Link to='/'>
-            <p style={{ fontWeight: 500, fontSize: "17px", color: "#5A5555" }}>
+          <Link to='/' style={{textDecoration: 'none'}}>
+            <p style={{ fontWeight: 500, fontSize: "17px", color: "#5A5555",  }}>
               Logout
             </p>
           </Link>

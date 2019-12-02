@@ -191,6 +191,9 @@ color: #9C9C9C;
   clear: both;
 }
 
+Link{
+  text-decoration: none;
+}
 /*
 animations
 */

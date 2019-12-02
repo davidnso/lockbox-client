@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import {Link} from 'react-router-dom'
-import { Timeline, TimelineEvent } from "react-event-timeline";
+import Timeline from 'react-visjs-timeline'
 import axios from "axios";
 import "./dashboard.css";
 import BuildingChart from "./components/chart/chart";
 
+const animation = {
+  duration: 2000,
+  easingFunction: 'easeInQuint'
+}
 const CSS_String = "margin-top:50px;";
 const options = {
   width: "100%",
@@ -36,22 +40,10 @@ const options = {
       year: ""
     }
   },
-  style: CSS_String
+  animation: animation
 };
-let items = [
-  {
-    start: new Date(2010, 7, 15),
-    content: "Entry: David Nsoesie"
-  },
-  {
-    start: new Date(2010, 7, 15),
-    content: "Trajectory A"
-  },
-  {
-    start: new Date(2010, 7, 17),
-    content: "Trajectory A"
-  }
-];
+
+
 
 export default class AdminDashboard extends Component {
   constructor(props) {
@@ -114,8 +106,10 @@ export default class AdminDashboard extends Component {
         const logs = apiResponse.data.logs;
         if (logs) {
           const items = logs.map(log => {
-            return { start: new Date(2010, 7, 17), content: log.username };
+            console.log(log)
+            return { start: new Date(2019, 7, 17), content: `Entry: ${log.username }`,};
           });
+
           this.setState({ items });
         } else {
           this.setState({ items: [] });
@@ -239,7 +233,7 @@ export default class AdminDashboard extends Component {
             >
               Monitoring
             </p>
-            <BuildingChart height="450" />
+            <Timeline className='timeline' options={options} items={this.state.items}/>
           </div>
         </span>
 

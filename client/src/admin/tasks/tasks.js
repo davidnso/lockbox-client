@@ -50,17 +50,27 @@ export default class Tasks extends Component {
   render() {
     return (
       <div style={{ marginLeft: "260px" }}>
-        This is the tasks page
-        {this.state.tickets
+<h2
+          style={{
+            fontFamily: "Nunito",
+            fontSize: "20px",
+            letterSpacing: ".05em"
+          }}
+        >
+          Tasks
+        </h2>        {this.state.tickets
           ? this.state.tickets.map(ticket => <div className='taskCard'>
+            <h3 style={{fontFamily: 'Nunito', color:'#A4A2A2'}}>Requesting access to building with Id#: {ticket.buildingId}</h3>
             <p>Details: {ticket.details}</p>
             {/* <p>{ticket.requester.name}</p> */}
-            <label>Reason</label>
-            <input type="textarea" onChange={(event)=>this.handleResponseChange(event,this.state.response)}></input>
+            {/* <label>Reason</label>
+            <input type="textarea" onChange={(event)=>this.handleResponseChange(event,this.state.response)}></input> */}
             <div style={{marginTop: "20px",
                   display: "flex",
                   flexDirection: 'row',
-                  width: '70%',
+                  justifyContent: 'space-between',
+                  float: 'right',
+                  width: '300px',
                   marginTop: '120px',
                   margin:'auto',}}>
             <button className="accept" value="accept" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Accept</button>

@@ -31,11 +31,7 @@ export default class StudentNavigation extends Component {
                     Tickets
                   </Link>
                 </li>
-                <li>
-                  <Link style={{ textDecoration: "none" }} to={"/student/notifications"}>
-                    notifications
-                  </Link>
-                </li>
+                
               </ul>
             </nav>
             <img
