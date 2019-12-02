@@ -59,6 +59,7 @@ export default class StudentDashboard extends Component {
     const userId = "5d90dc8f1c9d4400002fc3ce";
     axios.patch(`http://localhost:4100/users/${userId}/guest`,{name: guest.name}).then(apiResponse=>{ 
       console.log(apiResponse)
+      window.location.reload(false);
     })
   }
 
@@ -346,7 +347,7 @@ export default class StudentDashboard extends Component {
                   width: "95%",
                   padding: "5px",
                   minHeight: "100px",
-                  marginBottom: "40px"
+                  marginBottom: "40px",
                 }}
               >
                 <p
@@ -408,8 +409,8 @@ export default class StudentDashboard extends Component {
                   </div>
                 </div>
 
-                <this.ProgressBar percentage={guest.percentage} />
-                {guest.percentage == 33 && (
+                <this.ProgressBar percentage={100 - guest.percentage} />
+                {100 - guest.percentage >= 33 && (
                   <div
                     style={{
                       float: "right",
@@ -441,7 +442,8 @@ export default class StudentDashboard extends Component {
               zIndex: 4,
               position: "absolute",
               backgroundColor: "rgba(0,0,0,0.5)",
-              opacity: "50%",
+              opacity: "100%",
+              zIndex: 0,
               top: 0,
               left: 0,
               alignContent: "center",
@@ -456,6 +458,7 @@ export default class StudentDashboard extends Component {
                 alignSelf: "center",
                 textAlign: "center",
                 borderRadius: "10px",
+                zIndex: 5,
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%,-50%)",
@@ -523,7 +526,7 @@ export default class StudentDashboard extends Component {
             zIndex: 4,
             position: "absolute",
             backgroundColor: "rgba(0,0,0,0.5)",
-            opacity: "50%",
+            opacity: "100%",
             top: 0,
             left: 0,
             alignContent: "center",

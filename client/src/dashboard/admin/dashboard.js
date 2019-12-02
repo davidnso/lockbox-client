@@ -92,7 +92,7 @@ export default class AdminDashboard extends Component {
         .then(apiResponse => {
           const logs = apiResponse.data.logs;
           const items = logs.map(log => {
-            return { start: new Date(2010, 7, 17), content: log.username };
+            return { start: new Date(2010, 7, 17), content: `Entry: ${log.username }` };
           });
           this.setState({ items });
         })

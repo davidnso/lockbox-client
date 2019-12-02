@@ -1,6 +1,6 @@
 import { MongoDriver } from "../../drivers";
 import { Ticket } from "../../shared/entity/ticket";
-
+import {ObjectId} from 'mongodb';
 export class ServiceMongoDataStore {
   ticketStore: any;
   constructor() {
@@ -27,7 +27,8 @@ export class ServiceMongoDataStore {
     await this.ticketStore.insert(info);
   }
 
-  async updateTicket(update: any){
-    await this.ticketStore.updateOne({id: update.responseId}, {response: update.response})
+  async updateTicket(update: {requestId:any, response: string}){
+    console.log(update.response);
+    await this.ticketStore.update({_id: new ObjectId(update.requestId)},{ $set: {status: update.response}})
   }
 }

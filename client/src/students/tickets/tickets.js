@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import "./tickets.css";
 import axios from "axios";
+
+const statusColors = { 
+  accepted: '#58BE56',
+  pending: '#6680B1',
+  denied: '#EC9D9D',
+}
 export default class Tickets extends Component {
   state = {
     formStarted: true,
@@ -140,6 +146,16 @@ export default class Tickets extends Component {
           this.state.currentTickets.map(ticket => (
             <>
             <div style={{width: '90%', backgroundColor: '#FBFBFB', marginLeft: '15px', borderRadius: '8px', padding: '20px'}}>
+            <strong><label>Status:</label> </strong><button style={{
+              borderRadius: '3px',
+              border: 'none',
+              backgroundColor: statusColors[`${ticket.status}`],
+              padding: '3px',
+              fontWeight: 'bold',
+              fontFamily: 'Nunito',
+              fontSize: '16px',
+              color: 'white'
+            }}>{ticket.status}</button>
           <p className="ticketDetails">SR#: {ticket.buildingId}</p>
             <p className="ticketDetails">Details: {ticket.details}</p>
             <p className="ticketDetails">Duration: {ticket.end}</p>

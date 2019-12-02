@@ -4,7 +4,6 @@ import { Ticket } from "../../shared/entity/ticket";
 
 export type TicketResponse = {
   status: string;
-  reason: string;
 };
 
 const dataStore = new ServiceMongoDataStore();
@@ -24,18 +23,23 @@ export async function findUserServiceRequests({
 }
 
 //validate requester...
-export async function updateServiceRequest({
+export async function updateSR({
   requestId,
   response
 }: {
   requestId: string;
-  response: TicketResponse;
+  response: string;
 }) {
   /**
    * update the ticket with a response and set the status to accepted/denied.
    */
-  // 
+try {
+  console.log('here')
   await dataStore.updateTicket({requestId,response})
+} catch (error) {
+  console.log(error);
+}
+  
 }
 
 export async function createNewTicket(info:ticketInfo){

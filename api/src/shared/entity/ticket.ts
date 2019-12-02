@@ -4,6 +4,7 @@ export interface ticketInfo{
   buildingId: string;
   begin: Number;
   end: Number;
+  status: string;
 }
 
 
@@ -13,15 +14,14 @@ export class Ticket{
     begin: any
     end: any
     requesterId: any
-    response: {status: string,
-    reason: string}
+    status: string
     constructor(info:ticketInfo){
         this.details = info.details;
         this.buildingId = info.buildingId;
         this.begin = info.begin;
         this.end = info.end;
         this.requesterId = info.requesterId;
-        this.response = {status: 'pending',reason: ''};
+        this.status = 'pending'
 
     }
 }

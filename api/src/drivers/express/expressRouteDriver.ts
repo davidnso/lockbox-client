@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router, Request, NextFunction } from "express";
 import * as userHandlerFunctions from "../../user-module/Business-Logic";
 import * as serviceHandler from "../../service-module/Business-logic/serviceHandler";
 import * as buildingHandler from "../../building-module/business-logic/buildingHandler";
@@ -94,7 +94,7 @@ export class ExpressRouteDriver {
     router.get("/service/:id", fetchServiceRequests);
     router.post("/service/:id", createTicket);
     router.get("/service", fetchAllTickets);
-    router.patch("/service/:id", updateServiceRequest);
+    router.put("/service/:id", updateServiceRequest);
   }
 
   private static initBuildingRoutes(router: Router) {
@@ -191,6 +191,10 @@ async function updateUser(req: Request, res: Response){
   }
 }
 
+async function grantAccess(req: Request, res: Response, next: NextFunction){
+
+}
+
 /**
  * service request crud operations...
  *
@@ -211,10 +215,12 @@ async function fetchServiceRequests(req: Request, res: Response) {
 
 async function updateServiceRequest(req: Request, res: Response) {
   try {
-    console.log('updating')
     const requestId: string = req.params.id;
-    const update: serviceHandler.TicketResponse = req.body.response;
-    await serviceHandler.updateServiceRequest({ requestId, response: update });
+    const update = req.body.status;
+    console.log(update)
+
+    await serviceHandler.updateSR({ requestId, response: update });
+    res.status(200).json({message: 'update complete'})
   } catch (err) {
     res.status(404);
   }

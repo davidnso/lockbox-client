@@ -16,7 +16,7 @@ export default class Tasks extends Component {
     Axios.get("http://localhost:4100/service").then(async apiResponse => {
       const ticketArray = apiResponse.data.tickets;
       const fullTickets = await Promise.all(ticketArray.map(async ticket=>{
-        if(ticket.requesterId){
+        if(ticket.requesterId && ticket.status=='pending'){
         let userApiResponse = await Axios.get(`http://localhost:4100/users/${ticket.requesterId}`);
         const requester = { 
           name: userApiResponse.data[0].name,
@@ -35,9 +35,10 @@ export default class Tasks extends Component {
   submitTicketResponse(event,value,id){
     const response={
       status: value,
-      reason: this.state.response
+      //reason: this.state.response
     }
-    Axios.patch(`http://localhost:4100/service/${id}`, response).then(apiResponse=>{
+    console.log(response)
+    Axios.put(`http://localhost:4100/service/${id}`, response).then(apiResponse=>{
       console.log(apiResponse.status);
     })
     console.log('submitting')
@@ -73,8 +74,8 @@ export default class Tasks extends Component {
                   width: '300px',
                   marginTop: '120px',
                   margin:'auto',}}>
-            <button className="accept" value="accept" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Accept</button>
-            <button className="decline" value="decline" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Decline</button>
+            <button className="accept" value="accepted" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Accept</button>
+            <button className="decline" value="denied" type="submit" onClick={(event)=>this.submitTicketResponse(event,event.target.value,ticket._id)}>Decline</button>
               </div>
             
           </div>)
