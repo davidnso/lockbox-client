@@ -54,6 +54,7 @@ export class ExpressRouteDriver {
      * update user account with new status or.. whatever
      */
     router.patch("/users/:id", updateUser);
+    router.patch("/users/:id/access", updateUserAccessRights);
 
     router.get("/users/:id/guests", fetchGuests);
     router.patch("/users/:id/guest", deleteGuest);
@@ -193,6 +194,18 @@ async function updateUser(req: Request, res: Response){
 
 async function grantAccess(req: Request, res: Response, next: NextFunction){
 
+}
+
+async function updateUserAccessRights(req:Request, res:Response, next: NextFunction){
+  try {
+    const updates = req.body.rights;
+    const id = req.params.id;
+    console.log('attempting to update',updates);
+    await userHandlerFunctions.updateUserAccessRights({id, userUpdates: updates});
+    res.status(200).send('Successfully updated access rights')
+  } catch (error) {
+    res.status(404).send('Error when updating object')
+  }
 }
 
 /**

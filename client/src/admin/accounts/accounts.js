@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./accounts.css";
 import axios from "axios";
+import Axios from "axios";
 export default class Accounts extends Component {
   background = '../../resources/buildingIcon.png';
 
@@ -30,7 +31,8 @@ export default class Accounts extends Component {
         }
       ],
       selectedUser: {},
-      updateUser: true,
+      updateUser: false,
+      newAccessRights:''
     };
   }
   //TODO: ADD FILTER DROPDOWN AND ON CLICK HIDE THE SIDE BAR AND USER ACCOUNT INFO..
@@ -40,13 +42,28 @@ export default class Accounts extends Component {
     })
   }
   async fetchAllUsers(){
-    const apiResponse  = await axios.get('http://localhost:4100/users?role=Student');
+    const apiResponse  = await axios.get('http://localhost:4100/users?role=elevated');
     this.setState({privUsers: apiResponse.data})
     return apiResponse.data[0];
 
   }
   showUserDetails(user){
     this.setState({selectedUser: user});
+    this.setState({newAccessRights: ''});
+  }
+  handleInputChange(event){
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({[name]:value});
+    console.log(this.state.newAccessRights)
+  }
+  updateAccessRights(){
+    Axios.patch(`http://localhost:4100/users/${this.state.selectedUser._id}/access`, {rights: this.state.newAccessRights}).then(apiResponse=>{
+      if(200){
+        console.log('access rights updated');
+        window.location.reload();
+      }
+    })
   }
   render() {
     return (
@@ -96,7 +113,7 @@ export default class Accounts extends Component {
               }}
             >
               <ul className="listing">
-              {this.state.privUsers.map(user=>
+              {this.state.privUsers? this.state.privUsers.map(user=>
               <li onClick={(e)=>{
                 this.showUserDetails(user,e)
               }}>
@@ -144,7 +161,7 @@ export default class Accounts extends Component {
                 </label>
               </div>
             </li>
-            )}
+            ): null}
                 
                 
               </ul>
@@ -203,12 +220,12 @@ export default class Accounts extends Component {
                 Access Rights
               </p>
               <img src={require('../../resources/fullBuildingIcon.png')} style={{ width: "80px", height: "70px", alignSelf: "center" }}></img>
-              <p style={{color: '#838383', fontFamily: 'Nunito', fontSize:'12px'}}>{this.state.selectedUser.accessRights}</p>
+              {this.state.selectedUser.accessRights?this.state.selectedUser.accessRights.map(rights=>(<p style={{color: '#838383', fontFamily: 'Nunito', fontSize:'12px'}}>{rights}</p>)): <p style={{color: '#838383', fontFamily: 'Nunito', fontSize:'12px'}}>none</p>}
               <img src={require('../../resources/plusIcon.png')} style={{width: "21px", height: "21px", alignSelf: "center", cursor: 'pointer'}} onClick={()=>(this.setState({updateUser: !this.state.updateUser}))}></img>
               <br></br>
-              {this.state.updateUser && <><input style={{width: '80%', height:'18px', border: 'none', margin:'10px', borderBottom: '2px solid #75C2F6'}} type='text' placeholder="Enter building Name"></input>
+              {this.state.updateUser && <><input name='newAccessRights' style={{width: '80%', height:'18px', border: 'none', margin:'10px', borderBottom: '2px solid #75C2F6'}} type='text' placeholder="Enter building Name" onChange={(event)=>(this.handleInputChange(event))}></input>
               <br/>
-              <img style={{width:'10px',height:'10px', cursor: 'pointer'}}src={require('../../resources/chevron.png')}></img></> }
+              <img style={{width:'10px',height:'10px', cursor: 'pointer'}}src={require('../../resources/chevron.png')} onClick={()=>(this.updateAccessRights())}></img></> }
             </div>
           </div>
         </div>

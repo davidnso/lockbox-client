@@ -11,7 +11,7 @@ export default class Tasks extends Component {
     this.fetchOnLoad();
   }
 
-  fetchOnLoad() {
+  async fetchOnLoad() {
     let requesters = [];
     Axios.get("http://localhost:4100/service").then(async apiResponse => {
       const ticketArray = apiResponse.data.tickets;
@@ -23,6 +23,8 @@ export default class Tasks extends Component {
           role: userApiResponse.data[0].role,
         }
         ticket.requester = requester;
+        let apiResponse = await Axios.get(`http://localhost:4100/buildings/${ticket.buildingId}`);
+        ticket.buildingId = apiResponse.data[0].name
         //console.log(ticket.requester);
         }
         return ticket;

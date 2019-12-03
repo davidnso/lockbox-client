@@ -10,6 +10,7 @@ import {
   useRouteMatch
 } from "react-router-dom";
 import Login from "./login/login";
+require('dotenv').config();
 require("typeface-nunito");
 
 function renderNavigation() {
@@ -30,6 +31,8 @@ export class App extends Component {
     this.setState({login: true});
   }
   render() {
+    console.log(process.env.REACT_APP_LOCKBOX_API)
+
     return (
       // <Router>
       //   {this.state.isVisible && (

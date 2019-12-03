@@ -178,7 +178,6 @@ export default class Tickets extends Component {
           zIndex: 4,
           position: "absolute",
           backgroundColor: "rgba(0,0,0,0.5)",
-          opacity: "50%",
           top: 0,
           left: 0,
           alignContent: "center",

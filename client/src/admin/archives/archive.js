@@ -11,6 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Axios from "axios";
 import "react-table/react-table.css";
+import { NONAME } from "dns";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,14 +30,6 @@ function createData(id, name, building, date, time, status) {
   return { id, name, building, date, time, status };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
-
 export default class Archive extends Component {
   classes = useStyles;
   constructor(props) {
@@ -50,7 +43,7 @@ export default class Archive extends Component {
   }
 
   async fetchOnLoad() {
-    Axios.get(`http://localhost:4100/logs`).then(apiResponse => {
+    Axios.get(`http://localhost:4100/logs`).then(async apiResponse => {
       let logRow = [];
       let logs = apiResponse.data;
       // logs.map(async log => {
@@ -82,7 +75,14 @@ export default class Archive extends Component {
           month: date.getMonth()
         };
       });
-      console.log(logs);
+      logs = await Promise.all(logs.map(async log=>{
+        const apiResponse = await Axios.get(
+          `http://localhost:4100/buildings/${log.buildingId}`
+        );
+        log.buildingId = apiResponse.data[0].name;
+        return log;
+      })
+      )
       this.setState({ tableData: logs });
     });
   }
@@ -119,9 +119,23 @@ export default class Archive extends Component {
           className="archive_button"
           target="_blank"
         >
+          <button style={{
+            marginTop: '10px',
+            textAlign: 'center',
+            width: '100px',
+            border: 'none',
+            alignSelf: 'center',
+            fontWeight: 'bold',
+            borderRadius: '10px',
+            color: 'white',
+            backgroundColor: '#C2D7FF',
+            padding: '5px'
+          }}>
           Download
+          </button>
+          
         </CSVLink>
-        ;
+        
       </div>
     );
   }
