@@ -13,17 +13,17 @@ export default class Tasks extends Component {
 
   async fetchOnLoad() {
     let requesters = [];
-    Axios.get("http://localhost:4100/service").then(async apiResponse => {
+    Axios.get(`${process.env.REACT_APP_LOCKBOX_API}/service`).then(async apiResponse => {
       const ticketArray = apiResponse.data.tickets;
       const fullTickets = await Promise.all(ticketArray.map(async ticket=>{
         if(ticket.requesterId && ticket.status=='pending'){
-        let userApiResponse = await Axios.get(`http://localhost:4100/users/${ticket.requesterId}`);
+        let userApiResponse = await Axios.get(`${process.env.REACT_APP_LOCKBOX_API}/users/${ticket.requesterId}`);
         const requester = { 
           name: userApiResponse.data[0].name,
           role: userApiResponse.data[0].role,
         }
         ticket.requester = requester;
-        let apiResponse = await Axios.get(`http://localhost:4100/buildings/${ticket.buildingId}`);
+        let apiResponse = await Axios.get(`${process.env.REACT_APP_LOCKBOX_API}/buildings/${ticket.buildingId}`);
         ticket.buildingId = apiResponse.data[0].name
         //console.log(ticket.requester);
         }
@@ -40,7 +40,7 @@ export default class Tasks extends Component {
       //reason: this.state.response
     }
     console.log(response)
-    Axios.put(`http://localhost:4100/service/${id}`, response).then(apiResponse=>{
+    Axios.put(`${process.env.REACT_APP_LOCKBOX_API}/service/${id}`, response).then(apiResponse=>{
       console.log(apiResponse.status);
     })
     console.log('submitting')

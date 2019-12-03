@@ -42,7 +42,7 @@ export default class Accounts extends Component {
     })
   }
   async fetchAllUsers(){
-    const apiResponse  = await axios.get('http://localhost:4100/users?role=elevated');
+    const apiResponse  = await axios.get(`${process.env.REACT_APP_LOCKBOX_API}/users?role=elevated`);
     this.setState({privUsers: apiResponse.data})
     return apiResponse.data[0];
 
@@ -58,7 +58,7 @@ export default class Accounts extends Component {
     console.log(this.state.newAccessRights)
   }
   updateAccessRights(){
-    Axios.patch(`http://localhost:4100/users/${this.state.selectedUser._id}/access`, {rights: this.state.newAccessRights}).then(apiResponse=>{
+    Axios.patch(`${process.env.REACT_APP_LOCKBOX_API}/users/${this.state.selectedUser._id}/access`, {rights: this.state.newAccessRights}).then(apiResponse=>{
       if(200){
         console.log('access rights updated');
         window.location.reload();

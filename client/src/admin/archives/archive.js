@@ -43,12 +43,12 @@ export default class Archive extends Component {
   }
 
   async fetchOnLoad() {
-    Axios.get(`http://localhost:4100/logs`).then(async apiResponse => {
+    Axios.get(`${process.env.REACT_APP_LOCKBOX_API}/logs`).then(async apiResponse => {
       let logRow = [];
       let logs = apiResponse.data;
       // logs.map(async log => {
       //   const apiResponse = await Axios.get(
-      //     `http://localhost:4100/buildings/${log.buildingId}`
+      //     `${process.env.REACT_APP_LOCKBOX_API}/buildings/${log.buildingId}`
       //   );
       //   delete log.buildingId;
       //   log.buildingName = apiResponse.data[0].name;
@@ -77,7 +77,7 @@ export default class Archive extends Component {
       });
       logs = await Promise.all(logs.map(async log=>{
         const apiResponse = await Axios.get(
-          `http://localhost:4100/buildings/${log.buildingId}`
+          `${process.env.REACT_APP_LOCKBOX_API}/buildings/${log.buildingId}`
         );
         log.buildingId = apiResponse.data[0].name;
         return log;

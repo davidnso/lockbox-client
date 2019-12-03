@@ -44,13 +44,13 @@ export default class Monitoring extends Component {
     };
   }
   componentDidMount() {
-    Axios.get(`http://localhost:4100/buildings`).then(apiResponse => {
+    Axios.get(`${process.env.REACT_APP_LOCKBOX_API}/buildings`).then(apiResponse => {
       this.setState({ buildings: apiResponse.data.buildings });
     });
   }
   fetchOnSelect(buildingId){
     Axios
-      .get(`http://localhost:4100/buildings/${buildingId}/logs`)
+      .get(`${process.env.REACT_APP_LOCKBOX_API}/buildings/${buildingId}/logs`)
       .then(apiResponse => {
         const logs = apiResponse.data.logs;
         if (logs) {

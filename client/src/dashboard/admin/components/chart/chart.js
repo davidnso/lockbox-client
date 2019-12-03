@@ -44,7 +44,7 @@ export default class BuildingChart extends Component {
       currentBuilding: ''
     }
 
-    Axios.get(`http://localhost:4100/buildings/5d881a2b1c9d440000c7dd0d/logs`).then(apiResponse=>{
+    Axios.get(`${process.env.REACT_APP_LOCKBOX_API}/buildings/5d881a2b1c9d440000c7dd0d/logs`).then(apiResponse=>{
       const logs = apiResponse.data.logs
       const items = logs.map(log=>{
         return {start:new Date(2010, 7, 17), content: log.username}

@@ -18,7 +18,7 @@ export default class Login extends Component {
             username: this.state.username,
             password: this.state.password,
         }
-        Axios.post('http://localhost:4100/users/login', {auth}).then(apiResponse=>{
+        Axios.post(`${process.env.REACT_APP_LOCKBOX_API}/users/login`, {auth}).then(apiResponse=>{
             if(!apiResponse.data.bearer || !apiResponse.data.user){
                 this.setState({loginFailed: true})
             }

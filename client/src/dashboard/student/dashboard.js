@@ -48,7 +48,7 @@ export default class StudentDashboard extends Component {
     const userId = "5d90dc8f1c9d4400002fc3ce";
     user.status = this.state.pendingStatus;
     this.setState({user});
-    axios.patch(`http://localhost:4100/users/${userId}`,{status: user.status}).then(apiResponse=>{
+    axios.patch(`${process.env.REACT_APP_LOCKBOX_API}/users/${userId}`,{status: user.status}).then(apiResponse=>{
       console.log(apiResponse);
     })
     this.setState({showStatusModal: false});
@@ -57,7 +57,7 @@ export default class StudentDashboard extends Component {
 
   deleteGuest(event,guest){
     const userId = "5d90dc8f1c9d4400002fc3ce";
-    axios.patch(`http://localhost:4100/users/${userId}/guest`,{name: guest.name}).then(apiResponse=>{ 
+    axios.patch(`${process.env.REACT_APP_LOCKBOX_API}/users/${userId}/guest`,{name: guest.name}).then(apiResponse=>{ 
       console.log(apiResponse)
       window.location.reload(false);
     })
@@ -65,7 +65,7 @@ export default class StudentDashboard extends Component {
 
   async fetchOnLoad() {
     const userId = "5d90dc8f1c9d4400002fc3ce";
-    axios.get(`http://localhost:4100/users/${userId}`).then(apiResponse => {
+    axios.get(`${process.env.REACT_APP_LOCKBOX_API}/users/${userId}`).then(apiResponse => {
       const user = apiResponse.data[0];
       //parse name to only show the first.
       console.log(user)
@@ -74,7 +74,7 @@ export default class StudentDashboard extends Component {
 
     });
     axios
-      .get(`http://localhost:4100/users/${userId}/roommates`)
+      .get(`${process.env.REACT_APP_LOCKBOX_API}/users/${userId}/roommates`)
       .then(apiResponse => {
         const roommates = apiResponse.data;
         this.setState({ roommates });

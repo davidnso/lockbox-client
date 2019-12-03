@@ -73,7 +73,7 @@ export default class AdminDashboard extends Component {
 
   async fetchOnLoad() {
     await Promise.all([
-      axios.get("http://localhost:4100/service").then(apiResponse => {
+      axios.get(`${process.env.REACT_APP_LOCKBOX_API}/service`).then(apiResponse => {
         this.setState({
           tickets: apiResponse.data.tickets.length
             ? apiResponse.data.tickets.length
@@ -81,14 +81,14 @@ export default class AdminDashboard extends Component {
         });
         console.log(apiResponse.data.tickets.length);
       }),
-      axios.get("http://localhost:4100/buildings").then(apiResponse => {
+      axios.get(`${process.env.REACT_APP_LOCKBOX_API}/buildings`).then(apiResponse => {
         // this.setState({buildingList: apiResponse.data.buildings})
         this.setState({ building: apiResponse.data.buildings[0].name });
         this.setState({ buildingList: apiResponse.data.buildings });
         console.log(apiResponse.data.buildings[0].name);
       }),
       axios
-        .get(`http://localhost:4100/buildings/5d881a2b1c9d440000c7dd0d/logs`)
+        .get(`${process.env.REACT_APP_LOCKBOX_API}/buildings/5d881a2b1c9d440000c7dd0d/logs`)
         .then(apiResponse => {
           const logs = apiResponse.data.logs;
           const items = logs.map(log => {
@@ -101,7 +101,7 @@ export default class AdminDashboard extends Component {
 
   async fetchOnClick(buildingId) {
     axios
-      .get(`http://localhost:4100/buildings/${buildingId}/logs`)
+      .get(`${process.env.REACT_APP_LOCKBOX_API}/buildings/${buildingId}/logs`)
       .then(apiResponse => {
         const logs = apiResponse.data.logs;
         if (logs) {

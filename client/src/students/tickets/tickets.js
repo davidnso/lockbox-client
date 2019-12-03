@@ -32,7 +32,7 @@ export default class Tickets extends Component {
     };
     console.log(info);
     axios
-      .post(`http://localhost:4100/service/${userId}`, { info })
+      .post(`${process.env.REACT_APP_LOCKBOX_API}/service/${userId}`, { info })
       .then(apiResponse => {
         console.log("request made");
         if (apiResponse.statusText != 404) {
@@ -44,7 +44,7 @@ export default class Tickets extends Component {
   componentWillMount() {
     const user = localStorage.getItem("user");
     console.log(user);
-    axios.get(`http://localhost:4100/service/${user}`).then(apiResponse => {
+    axios.get(`${process.env.REACT_APP_LOCKBOX_API}/service/${user}`).then(apiResponse => {
       if (!apiResponse.data || apiResponse.data.length == 0) {
         this.setState({ ticketsExist: false });
       } else {
@@ -58,7 +58,7 @@ export default class Tickets extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:4100/buildings`).then(apiResponse => {
+    axios.get(`${process.env.REACT_APP_LOCKBOX_API}/buildings`).then(apiResponse => {
       this.setState({ buildings: apiResponse.data.buildings });
     });
   }
