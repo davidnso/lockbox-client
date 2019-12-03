@@ -45,7 +45,7 @@ export default class StudentDashboard extends Component {
   }
 
   handleSubmit(event, user){
-    const userId = "5d90dc8f1c9d4400002fc3ce";
+    const userId = localStorage.getItem('user');
     user.status = this.state.pendingStatus;
     this.setState({user});
     axios.patch(`${process.env.REACT_APP_LOCKBOX_API}/users/${userId}`,{status: user.status}).then(apiResponse=>{
@@ -64,7 +64,7 @@ export default class StudentDashboard extends Component {
   }
 
   async fetchOnLoad() {
-    const userId = "5d90dc8f1c9d4400002fc3ce";
+    const userId = localStorage.getItem('user');
     axios.get(`${process.env.REACT_APP_LOCKBOX_API}/users/${userId}`).then(apiResponse => {
       const user = apiResponse.data[0];
       //parse name to only show the first.
