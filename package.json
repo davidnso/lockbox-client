@@ -20,7 +20,7 @@
     "react-visjs-timeline": "^1.5.0",
     "typeface-nunito": "0.0.72",
     "vis": "^4.21.0",
-    "vis-timeline": "^6.2.7"
+    "vis-timeline": "^7.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
